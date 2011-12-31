@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="elm_proto_preference">
+        <item>Automatic(recommended)</item>
+        <item>SAE J1850 PWM (41.6 Kbaud)</item>
+        <item>SAE J1850 VPW (10.4 Kbaud)</item>
+        <item>ISO 9141-2 (5 baud init)</item>  
+        <item>ISO 14230-4 KWP (5 baud init)</item>  
+        <item>ISO 14230-4 KWP (fast init)</item>  
+        <item>ISO 15765-4 CAN (11 bit ID, 500 Kbaud)</item>  
+        <item>ISO 15765-4 CAN (29 bit ID, 500 Kbaud)</item>  
+        <item>ISO 15765-4 CAN (11 bit ID, 250 Kbaud)</item>  
+        <item>ISO 15765-4 CAN (29 bit ID, 250 Kbaud)</item>  
+    </string-array>
+
+    <string-array name="elm_bank">
+        <item>One value per bank</item>
+        <item>Two values per bank</item>
+        <item>Four values per bank</item>
+    </string-array>
+
+    
+</resources>

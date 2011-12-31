@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, AndroidOpenElmActivity!</string>
+    <string name="app_name">AndroidOpenElm</string>
+    <string name="elm_preferences">Preferences</string>
+    <string name="elm_start">Start</string>
+    <string name="elm_stop">Stop</string>
+    <string name="elm_exit">Exit</string>
+    <string name="elm_"></string>
+    <string name="elm_proto">Protocol</string>
+    <string name="elm_proto_setup">Protocol setup</string>
+    <string name="elm_proto_auto">Automatic(recommended)</string>
+    <string name="elm_proto_J1850_1">SAE J1850 PWM (41.6 Kbaud)</string>
+    <string name="elm_proto_J1850_2">SAE J1850 VPW (10.4 Kbaud)</string>
+    <string name="elm_proto_9141">ISO 9141-2 (5 baud init)</string>
+    <string name="elm_proto_14230_4_1">ISO 14230-4 KWP (5 baud init)</string>
+    <string name="elm_proto_14230_4_2">ISO 14230-4 KWP (fast init)</string>
+    <string name="elm_proto_15765_4_1">ISO 15765-4 CAN (11 bit ID, 500 Kbaud)</string>
+    <string name="elm_proto_15765_4_2">ISO 15765-4 CAN (29 bit ID, 500 Kbaud)</string>
+    <string name="elm_proto_15765_4_3">ISO 15765-4 CAN (11 bit ID, 250 Kbaud)</string>
+    <string name="elm_proto_15765_4_4">ISO 15765-4 CAN (29 bit ID, 250 Kbaud)</string>
+    <string name="elm_bank">Bank</string>
+    <string name="elm_bank_setup">Bank setup</string>
+
+
+
+</resources>
