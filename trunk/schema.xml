@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<elm-config storepicvalues="true">
+<colors>
+</colors>
+	<bank_element id="1" active="true" >
+	 	<obd mode="1" pid="0A" bytes="1" />
+	 	<shorttext>speed</shorttext>
+	 	<descriptiontext>speed o meter</descriptiontext>
+	 	<minval>0</minval>
+	 	<maxval>100</maxval>
+	 	<warning>30</warning>
+	 	<error>70</error>
+	 	<picval>45</picval>
+	 	<formula>((256*A)+B) / 100</formula>
+	 	<gauge analog="true" >
+	 		<notces total="40" increment_large="2" increment_small="1" display_factor="1" /> 
+	 		<scale min="0" center="14" max="26" />
+	 		<visibility gauge="true" range="true" />
+	 		<range name="ok" min="0" max="15" /> 
+	 		<range name="warning" min="15" max="26" /> 
+	 		<range name="error" min="26" max="30" /> 
+	 		<color name="face" red="248" green="248" blue="255" />
+	 		<color name="scale" red="0" green="0" blue="0" />
+	 		<color name="hand" red="255" green="0" blue="0" />
+	 		<color name="titles" red="139" green="136" blue="120" />
+	 		<titles lower="" upper="" unit="" />
+	 	</gauge>
+	</bank_element>
+</elm-config>

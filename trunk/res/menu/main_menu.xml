@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/elm_preferences"
+        android:title="@string/elm_preferences" />
+    <item android:id="@+id/elm_start"
+        android:title="@string/elm_start" />
+    <item android:id="@+id/elm_stop"
+        android:title="@string/elm_stop" />
+    <item android:id="@+id/elm_exit"
+        android:title="@string/elm_exit" />
+</menu>

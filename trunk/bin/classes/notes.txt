@@ -1,0 +1,9 @@
+base config
+[menu]
+  preferences
+  start
+  stop
+  exit
+ 
+ 
+ [preferences]  
