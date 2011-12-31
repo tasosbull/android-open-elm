@@ -3,22 +3,24 @@ package com.android.openelm;
 public class ElmBankElement {
     public static double NOVAL = -123456;	
 	private int id;
+	private boolean active;
     private String pid;
     private String mode;
     private String description;
+    private String shortDescription;
     private String units;
     private int numbytes;
     private double minval;
-    private double yellowval;
-    private double redval;
+    private double warning;
+    private double error;
 	private double maxval;
     private String formula;
     private double peakvalue;
     
     public ElmBankElement(){
     	
-    	yellowval = NOVAL;
-    	redval = NOVAL;
+    	warning = NOVAL;
+    	error = NOVAL;
     	
     }
 
@@ -70,11 +72,11 @@ public class ElmBankElement {
 	public void setMaxval(double maxval) {
 		this.maxval = maxval;
 	}
-	public double getRedval() {
-		return redval;
+	public double getError() {
+		return error;
 	}
-	public void setRedval(double redval) {
-		this.redval = redval;
+	public void setError(double error) {
+		this.error = error;
 	}
 	public String getFormula() {
 		return formula;
@@ -88,11 +90,11 @@ public class ElmBankElement {
 	public void setPeakvalue(double peakvalue) {
 		this.peakvalue = peakvalue;
 	}
-    public double getYellowval() {
-		return yellowval;
+    public double getWarning() {
+		return warning;
 	}
-	public void setYellowval(double yellowval) {
-		this.yellowval = yellowval;
+	public void setWarningl(double warning) {
+		this.warning = warning;
 	}
 
 

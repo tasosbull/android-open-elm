@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <elm-config storepicvalues="true">
-<colors>
-</colors>
 	<bank_element id="1" active="true" >
 	 	<obd mode="1" pid="0A" bytes="1" />
 	 	<shorttext>speed</shorttext>
@@ -10,7 +8,6 @@
 	 	<maxval>100</maxval>
 	 	<warning>30</warning>
 	 	<error>70</error>
-	 	<picval>45</picval>
 	 	<formula>((256*A)+B) / 100</formula>
 	 	<gauge analog="true" >
 	 		<notces total="40" increment_large="2" increment_small="1" display_factor="1" /> 
