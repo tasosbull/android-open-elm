@@ -1,6 +1,6 @@
 package com.android.openelm;
 
-public class ElmBankElement {
+public class ElmBankElement  implements Comparable<ElmBankElement>{
     public static double NOVAL = -123456;	
 	private int id;
 	private boolean active;
@@ -16,8 +16,37 @@ public class ElmBankElement {
 	private double maxval;
     private String formula;
     private double peakvalue;
+    private GaugeSchema gauge;
     
-    public ElmBankElement(){
+    public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
+
+	public GaugeSchema getGauge() {
+		return gauge;
+	}
+
+	public void setGauge(GaugeSchema gauge) {
+		this.gauge = gauge;
+	}
+
+	public void setWarning(double warning) {
+		this.warning = warning;
+	}
+
+	public ElmBankElement(){
     	
     	warning = NOVAL;
     	error = NOVAL;
@@ -97,5 +126,9 @@ public class ElmBankElement {
 		this.warning = warning;
 	}
 
-
+	public int compareTo(ElmBankElement another) {
+        if (another == null) return 1;
+        Integer _id = another.id;
+        return _id.compareTo(this.getId());
+    }
 }

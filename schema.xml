@@ -1,26 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<elm-config storepicvalues="true">
-	<bank_element id="1" active="true" >
-	 	<obd mode="1" pid="0A" bytes="1" />
-	 	<shorttext>speed</shorttext>
-	 	<descriptiontext>speed o meter</descriptiontext>
-	 	<minval>0</minval>
-	 	<maxval>100</maxval>
-	 	<warning>30</warning>
-	 	<error>70</error>
-	 	<formula>((256*A)+B) / 100</formula>
-	 	<gauge analog="true" >
-	 		<notces total="40" increment_large="2" increment_small="1" display_factor="1" /> 
-	 		<scale min="0" center="14" max="26" />
-	 		<visibility gauge="true" range="true" />
-	 		<range name="ok" min="0" max="15" /> 
-	 		<range name="warning" min="15" max="26" /> 
-	 		<range name="error" min="26" max="30" /> 
-	 		<color name="face" red="248" green="248" blue="255" />
-	 		<color name="scale" red="0" green="0" blue="0" />
-	 		<color name="hand" red="255" green="0" blue="0" />
-	 		<color name="titles" red="139" green="136" blue="120" />
-	 		<titles lower="" upper="" unit="" />
-	 	</gauge>
-	</bank_element>
-</elm-config>
+<obd_items>
+	<item>
+  		<id>1</id>
+  		<active>1</active>
+  		<obd_mode>1</obd_mode>
+  		<obd_pid>0A</obd_pid>
+  		<obd_bytes>2</obd_bytes>
+  		<short_text>speed</short_text>
+  		<description_text>speed o meter</description_text>
+  		<minval>0</minval>
+  		<maxval>100</maxval>
+  		<warning>30</warning>
+  		<error>70</error>
+  		<formula>((256*A)+B) / 100</formula>
+  		<gauge_analog>1</gauge_analog>
+  		<gauge_notches_total>40</gauge_notches_total>
+  		<gauge_notches_increment_large>2</gauge_notches_increment_large>
+  		<gauge_notches_increment_small>1</gauge_notches_increment_small>
+  		<gauge_notches_display_factor>1</gauge_notches_display_factor>
+  		<gauge_scale_min_center_max>0;14;26</gauge_scale_min_center_max>
+  		<gauge_visible_gauge_scale>1;1</gauge_visible_gauge_scale>
+  		<gauge_color_face_rgb>248;248;255</gauge_color_face_rgb>
+  		<gauge_color_scale_rgb>0;0;0</gauge_color_scale_rgb>
+  		<gauge_color_hand_rgb>255;0;0</gauge_color_hand_rgb>
+  		<gauge_color_titles_rgb>255;0;0</gauge_color_titles_rgb>
+  		<gauge_title_lower></gauge_title_lower>
+  		<gauge_title_upper></gauge_title_upper>
+  		<gauge_title_unit></gauge_title_unit>
+	</item>
+</obd_items>
+
+
+
+
+
+
+
+
