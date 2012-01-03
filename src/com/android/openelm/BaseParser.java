@@ -1,12 +1,23 @@
 package com.android.openelm;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.app.Activity;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 
 import com.android.openelm.interfaces.IParser;
 
-public abstract class BaseParser implements IParser{
+public class BaseParser implements IParser{
+	
+	private Activity activity;
+	
+	private List<ElmBankElement> elements = null;
 	
 	static final String ID = "id";
 	static final String ACTIVE = "active";
@@ -36,22 +47,35 @@ public abstract class BaseParser implements IParser{
 	static final String GAUGE_TITLE_UNIT = "gauge_title_unit";
 
 
-	final URL feedUrl;
 
-    protected BaseParser(String feedUrl){
-        try {
-            this.feedUrl = new URL(feedUrl);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+    protected BaseParser(Activity _activity){
+    	activity = _activity;
     }
-
-    protected InputStream getInputStream() {
-        try {
-            return feedUrl.openConnection().getInputStream();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public List<ElmBankElement> parse() throws XmlPullParserException, IOException {
+    	elements = new ArrayList<ElmBankElement>();
+    	Resources res = activity.getResources();
+    	XmlResourceParser xpp = res.getXml(R.xml.elm);
+    	xpp.next();
+    	int eventType = xpp.getEventType();
+    	while (eventType != XmlPullParser.END_DOCUMENT)
+    	{
+    		if(eventType == XmlPullParser.START_DOCUMENT)
+    		{
+    		}
+    		else if(eventType == XmlPullParser.START_TAG)
+    		{
+    		}
+    		else if(eventType == XmlPullParser.END_TAG)
+    		{
+    		}
+    		else if(eventType == XmlPullParser.TEXT)
+    		{
+    		}
+    		eventType = xpp.next();
+    	}
+    	// parse first
+    	return elements;
+    	
     }
 	
 }
