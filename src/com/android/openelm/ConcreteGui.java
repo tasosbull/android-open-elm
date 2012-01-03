@@ -12,7 +12,7 @@ public class ConcreteGui implements IGui{
 	}
 
 	public void ProcMessages() {
-		// TODO Unfortunally android do not support this task
+		// TODO Android do not support this task
 		
 	}
 
