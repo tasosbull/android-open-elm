@@ -21,10 +21,11 @@ public final class R {
         public static final int plastic=0x7f020003;
     }
     public static final class id {
-        public static final int elm_exit=0x7f080003;
-        public static final int elm_preferences=0x7f080000;
-        public static final int elm_start=0x7f080001;
-        public static final int elm_stop=0x7f080002;
+        public static final int elm=0x7f080000;
+        public static final int elm_exit=0x7f080004;
+        public static final int elm_preferences=0x7f080001;
+        public static final int elm_start=0x7f080002;
+        public static final int elm_stop=0x7f080003;
     }
     public static final class layout {
         public static final int main=0x7f030000;

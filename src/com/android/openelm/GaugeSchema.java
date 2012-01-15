@@ -12,13 +12,13 @@ public class GaugeSchema {
 	private int scaleMax;
 	private boolean gaugeVisible;
 	private boolean rangeVisible;
-	private int okMin;
+/*	private int okMin;
 	private int okMax;
 	private int warningMin;
 	private int warningMax;
 	private int errorMin;
 	private int errorMax;
-	private int faceRed;
+*/	private int faceRed;
 	private int faceGreen;
 	private int faceBlue;
 	private int scaleRed;
@@ -93,7 +93,7 @@ public class GaugeSchema {
 	public void setRangeVisible(boolean rangeVisible) {
 		this.rangeVisible = rangeVisible;
 	}
-	public int getOkMin() {
+/*	public int getOkMin() {
 		return okMin;
 	}
 	public void setOkMin(int okMin) {
@@ -128,7 +128,7 @@ public class GaugeSchema {
 	}
 	public void setErrorMax(int errorMax) {
 		this.errorMax = errorMax;
-	}
+	}*/
 	public int getFaceRed() {
 		return faceRed;
 	}
