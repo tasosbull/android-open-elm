@@ -18,6 +18,11 @@ public class AndroidOpenElmActivity extends Activity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         TextView testXmlContent = (TextView)findViewById(R.id.elm);
+        ExpressionEvaluator eval = new ExpressionEvaluator();
+        double value = eval.Evaluate(this, "1+1");
+        testXmlContent.setText(Double.toString(value));
+        
+        /*
         String str = "";
         BaseParser parser = new BaseParser(this);
         try {
@@ -34,6 +39,7 @@ public class AndroidOpenElmActivity extends Activity  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
     }
 	 @Override
 	 public boolean onCreateOptionsMenu(Menu menu) {

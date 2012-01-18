@@ -84,11 +84,6 @@ public class BaseParser implements IParser {
 				if(currentTag.equals(ID)){
 					current.setId(Integer.parseInt(xpp.getText()));
 				}
-				/* 
-				else if(currentTag.equals()){
-					
-				}
-				 */
 				else if(currentTag.equals(ACTIVE)){
 					boolean b = Integer.parseInt(xpp.getText()) != 0;
 					current.setActive(b);
@@ -203,14 +198,9 @@ public class BaseParser implements IParser {
 				else if(currentTag.equals(GAUGE_TITLE_UNIT)){
 					current.getGauge().setTitleUnit(xpp.getText());
 				}
-
-			
 			}
 			eventType = xpp.next();
 		}
-		// parse first
 		return elements;
-
 	}
-
 }
