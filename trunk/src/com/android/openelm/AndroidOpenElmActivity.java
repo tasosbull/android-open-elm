@@ -18,8 +18,8 @@ public class AndroidOpenElmActivity extends Activity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         TextView testXmlContent = (TextView)findViewById(R.id.elm);
-        ExpressionEvaluator eval = new ExpressionEvaluator();
-        double value = eval.Evaluate(this, "1+1");
+        ExpressionEvaluator eval = new ExpressionEvaluator(this);
+        double value = eval.Evaluate( "1+1");
         testXmlContent.setText(Double.toString(value));
         
         /*
