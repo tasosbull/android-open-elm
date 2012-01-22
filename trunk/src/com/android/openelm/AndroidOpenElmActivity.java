@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.android.openelm.interfaces.IGui;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
-public class AndroidOpenElmActivity extends Activity  {
+public class AndroidOpenElmActivity extends Activity implements IGui  {
+	
+	
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +27,9 @@ public class AndroidOpenElmActivity extends Activity  {
         double value = eval.Evaluate( "1+1");
         testXmlContent.setText(Double.toString(value));
         
-        /*
+        
+        
+        /*   //test xml file
         String str = "";
         BaseParser parser = new BaseParser(this);
         try {
@@ -63,4 +70,12 @@ public class AndroidOpenElmActivity extends Activity  {
 		 startActivity(new Intent(this, PreferencesFromXml.class));
 	 
 	 }
+	public void AddError(String aError) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void ProcMessages() {
+		// TODO Auto-generated method stub
+		
+	}
 }
