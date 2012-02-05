@@ -22,6 +22,8 @@
     <string name="elm_proto_15765_4_4">ISO 15765-4 CAN (29 bit ID, 250 Kbaud)</string>
     <string name="elm_bank">Bank</string>
     <string name="elm_bank_setup">Bank setup</string>
+    <string name="elm_com_port">Com port</string>
+    <string name="elm_com_port_setup">Com port setup</string>
 
 
 
