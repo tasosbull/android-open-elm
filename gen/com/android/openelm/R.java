@@ -10,6 +10,7 @@ package com.android.openelm;
 public final class R {
     public static final class array {
         public static final int elm_bank=0x7f050001;
+        public static final int elm_com_port=0x7f050002;
         public static final int elm_proto_preference=0x7f050000;
     }
     public static final class attr {
@@ -38,6 +39,8 @@ public final class R {
         public static final int elm_=0x7f060006;
         public static final int elm_bank=0x7f060013;
         public static final int elm_bank_setup=0x7f060014;
+        public static final int elm_com_port=0x7f060015;
+        public static final int elm_com_port_setup=0x7f060016;
         public static final int elm_exit=0x7f060005;
         public static final int elm_preferences=0x7f060002;
         public static final int elm_proto=0x7f060007;

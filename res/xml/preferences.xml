@@ -20,6 +20,14 @@
                 android:entryValues="@array/elm_bank"
                 android:dialogTitle="@string/elm_bank" />
 
+        <ListPreference
+                android:key="list_preference"
+                android:title="@string/elm_com_port"
+                android:summary="@string/elm_com_port_setup"
+                android:entries="@array/elm_com_port"
+                android:entryValues="@array/elm_com_port"
+                android:dialogTitle="@string/elm_com_port" />
+
 
     </PreferenceCategory>
 
