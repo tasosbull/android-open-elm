@@ -16,4 +16,19 @@ public class ConcreteGui implements IGui{
 		
 	}
 
+	public int GetPortSelected() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public String GetElmProtoSelected() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int GetBankLayoutElementsSelected() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
