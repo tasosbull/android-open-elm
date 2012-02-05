@@ -5,7 +5,7 @@
             android:title="@string/elm_preferences">
 
         <ListPreference
-                android:key="list_preference"
+                android:key="list_preference_proto"
                 android:title="@string/elm_proto"
                 android:summary="@string/elm_proto_setup"
                 android:entries="@array/elm_proto_preference"
@@ -13,7 +13,7 @@
                 android:dialogTitle="@string/elm_proto" />
     
         <ListPreference
-                android:key="list_preference"
+                android:key="list_preference_bank"
                 android:title="@string/elm_bank"
                 android:summary="@string/elm_bank_setup"
                 android:entries="@array/elm_bank"
@@ -21,7 +21,7 @@
                 android:dialogTitle="@string/elm_bank" />
 
         <ListPreference
-                android:key="list_preference"
+                android:key="list_preference_port"
                 android:title="@string/elm_com_port"
                 android:summary="@string/elm_com_port_setup"
                 android:entries="@array/elm_com_port"
