@@ -21,9 +21,9 @@ public class ConcreteGui implements IGui{
 		return 0;
 	}
 
-	public String GetElmProtoSelected() {
+	public int GetElmProtoSelected() {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	public int GetBankLayoutElementsSelected() {

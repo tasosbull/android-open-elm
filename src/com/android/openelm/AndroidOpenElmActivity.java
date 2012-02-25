@@ -1,9 +1,6 @@
 package com.android.openelm;
 
-import java.io.IOException;
-import java.util.List;
 
-import org.xmlpull.v1.XmlPullParserException;
 
 import com.android.openelm.interfaces.IGui;
 
@@ -16,19 +13,19 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
+
 
 public class AndroidOpenElmActivity extends Activity implements IGui {
 
 	int port = 1;
-	String elmProto = "Automatic(recommended)";
+	int elmProto = 0;
 	int bankLayout = 4;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		getPrefs();
+		//getPrefs();
 		/*
 		 * setContentView(R.layout.main); TextView testXmlContent =
 		 * (TextView)findViewById(R.id.elm); ExpressionEvaluator eval = new
@@ -51,7 +48,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui {
 	@Override
 	public void onStart() {
 		super.onStart();
-		// getPrefs();
+		getPrefs();
 	}
 
 	@Override
@@ -92,7 +89,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui {
 		return port;
 	}
 
-	public String GetElmProtoSelected() {
+	public int GetElmProtoSelected() {
 		return elmProto;
 	}
 
@@ -102,15 +99,12 @@ public class AndroidOpenElmActivity extends Activity implements IGui {
 	}
 
 	private void getPrefs() {
-		// elmPreferences();
 		Context ctx = this.getBaseContext();
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(ctx);
-		port = Integer.parseInt(prefs.getString("list_preference_port", "8"));
-		elmProto = prefs.getString("list_preference_proto",
-				"Automatic(recommended)");
-		bankLayout = Integer.parseInt(prefs.getString("list_preference_bank",
-				"4"));
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(  ctx);
+		port = Integer.parseInt(prefs.getString("list_preference_port", "1"));
+		elmProto = Integer.parseInt(prefs.getString("list_preference_proto", "0"));
+		String bankStr = prefs.getString("list_preference_bank", "4");
+		bankLayout = Integer.parseInt(bankStr);
 	}
 
 }

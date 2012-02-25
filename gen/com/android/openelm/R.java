@@ -9,9 +9,11 @@ package com.android.openelm;
 
 public final class R {
     public static final class array {
-        public static final int elm_bank=0x7f050001;
-        public static final int elm_com_port=0x7f050002;
+        public static final int elm_bank=0x7f050002;
+        public static final int elm_bank_values=0x7f050003;
+        public static final int elm_com_port=0x7f050004;
         public static final int elm_proto_preference=0x7f050000;
+        public static final int elm_proto_preference_value=0x7f050001;
     }
     public static final class attr {
     }

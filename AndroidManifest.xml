@@ -14,15 +14,10 @@
             android:name=".AndroidOpenElmActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".PreferencesFromXml" android:label="@string/elm_preferences">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.CATEGORY_DEFAULT" />
-            </intent-filter>
         </activity>
         
     </application>

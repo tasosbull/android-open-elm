@@ -2,14 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-            android:title="@string/elm_preferences">
+            android:title="@string/elm_preferences"
+             android:key="elm_preferences">
 
         <ListPreference
                 android:key="list_preference_proto"
                 android:title="@string/elm_proto"
                 android:summary="@string/elm_proto_setup"
                 android:entries="@array/elm_proto_preference"
-                android:entryValues="@array/elm_proto_preference"
+                android:entryValues="@array/elm_proto_preference_value"
                 android:dialogTitle="@string/elm_proto" />
     
         <ListPreference
@@ -17,7 +18,7 @@
                 android:title="@string/elm_bank"
                 android:summary="@string/elm_bank_setup"
                 android:entries="@array/elm_bank"
-                android:entryValues="@array/elm_bank"
+                android:entryValues="@array/elm_bank_values"
                 android:dialogTitle="@string/elm_bank" />
 
         <ListPreference

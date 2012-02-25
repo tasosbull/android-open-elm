@@ -35,7 +35,7 @@ public class LightDigitalDisplay extends View {
 	private Path valuePath;
 	private RectF valueRect;
 	private Paint valuePaint;
-	private int valueColor = Color.rgb(255, 255, 255);
+	//private int valueColor = Color.rgb(255, 255, 255);
 
 	private RectF unitRect;
 	private Paint unitPaint;
