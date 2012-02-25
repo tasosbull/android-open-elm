@@ -12,11 +12,29 @@
         <item>ISO 15765-4 CAN (11 bit ID, 250 Kbaud)</item>  
         <item>ISO 15765-4 CAN (29 bit ID, 250 Kbaud)</item>  
     </string-array>
+    <string-array name="elm_proto_preference_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>  
+        <item>4</item>  
+        <item>5</item>  
+        <item>6</item>  
+        <item>7</item>  
+        <item>8</item>  
+        <item>9</item>  
+    </string-array>
 
     <string-array name="elm_bank">
         <item>One value per bank</item>
         <item>Two values per bank</item>
         <item>Four values per bank</item>
+    </string-array>
+
+    <string-array name="elm_bank_values">
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
     </string-array>
 
     <string-array name="elm_com_port">
