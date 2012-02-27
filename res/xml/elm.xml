@@ -4,16 +4,16 @@
 	<item>
   		<id>1</id>
   		<active>1</active>
-  		<obd_mode>1</obd_mode>
-  		<obd_pid>0A</obd_pid>
+  		<obd_mode>01</obd_mode>
+  		<obd_pid>0C</obd_pid>
   		<obd_bytes>2</obd_bytes>
-  		<short_text>speed</short_text>
-  		<description_text>speed o meter</description_text>
+  		<short_text>rpm</short_text>
+  		<description_text>engine rpm</description_text>
   		<minval>0</minval>
   		<maxval>100</maxval>
   		<warning>30</warning>
   		<error>70</error>
-  		<formula>((256*A)+B) / 100</formula>
+  		<formula>((A*256)+B)/4</formula>
   		<gauge_analog>1</gauge_analog>
   		<gauge_notches_total>40</gauge_notches_total>
   		<gauge_notches_increment_large>2</gauge_notches_increment_large>

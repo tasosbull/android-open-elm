@@ -57,24 +57,18 @@ public class AndroidOpenElmActivity extends Activity implements IGui , OnClickLi
 		elm = (TextView)findViewById(R.id.elm);
 		button.setOnClickListener(this);
 		getPrefs();
-		maestro = new ElmMaestro(this);
-		maestro.set_activity(this);
-		maestro.set_port(port);
-		maestro.set_bankLayout(bankLayout);
-		maestro.set_elmProto(elmProto);
-		maestro.set_timerRefresh(1000);
-		try {
-			if(maestro.Init())
-				maestro.Start();
-		} catch (Exception e) {
-			this.AddError(e.getMessage());
-		}
 
 	}
 	
     public void onClick(View v) {
     	if(v == button){
     		maestro.Stop();
+    		try {
+    			if(maestro.Init())
+    				maestro.Start();
+    		} catch (Exception e) {
+    			this.AddError(e.getMessage());
+    		}
     	}
       }
 
@@ -97,6 +91,26 @@ public class AndroidOpenElmActivity extends Activity implements IGui , OnClickLi
 		switch (item.getItemId()) {
 		case R.id.elm_preferences:
 			elmPreferences();
+			return true;
+		case R.id.elm_start:
+			getPrefs();
+			maestro = new ElmMaestro(this);
+			maestro.set_activity(this);
+			maestro.set_port(port);
+			maestro.set_bankLayout(bankLayout);
+			maestro.set_elmProto(elmProto);
+			maestro.set_timerRefresh(1000);
+			try {
+				if(maestro.Init())
+					maestro.Start();
+			} catch (Exception e) {
+				this.AddError(e.getMessage());
+			}
+	
+			return true;
+		case R.id.elm_stop:
+			if(maestro != null)
+    		maestro.Stop();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

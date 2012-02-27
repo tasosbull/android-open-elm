@@ -75,7 +75,7 @@ public class ConcreteCommPort implements ICommPort {
 		port = aCommPort;
 	}
 
-	public void Connect() {
+	public boolean Connect() {
 		bluetoothAdapter.cancelDiscovery();
 		try {
 			Method m = blueToothDevice.getClass().getMethod(
@@ -83,14 +83,19 @@ public class ConcreteCommPort implements ICommPort {
 			socket = (BluetoothSocket) m.invoke(blueToothDevice, port);
 			assert (socket != null) : "Socket is Null";
 			socket.connect();
+			return true;
 		} catch (IOException ex) {
 			SetError("IOException " + ex.getMessage());
+			return false;
 		} catch (NoSuchMethodException ex) {
 			SetError("NoSuchMethodException " + ex.getMessage());
+			return false;
 		} catch (IllegalAccessException ex) {
 			SetError("IllegalAccessException " + ex.getMessage());
+			return false;
 		} catch (InvocationTargetException ex) {
 			SetError("InvocationTargetException " + ex.getMessage());
+			return false;
 		}
 	}
 
