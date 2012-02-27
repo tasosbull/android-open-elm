@@ -24,6 +24,7 @@ public class ElmMaestro {
 	private int _currentBankElement = -1;
 	private long _timerRefresh = 5;
 	private Timer _localTimer;
+	boolean connected = false;
 	ExpressionEvaluator eval = null;
 	ICommPort comPort = null;
 	ITimer timer = null;
@@ -59,7 +60,9 @@ public class ElmMaestro {
 		LoadXmlElements();
 		if (!CreatePort())
 			return false;
-		comPort.Connect();
+		if (!comPort.Connect())
+			return false;
+		connected = true;
 		CreateTimer();
 		core = new ElmCore(comPort, timer, gui);
 		core.FastInit();
@@ -77,53 +80,54 @@ public class ElmMaestro {
 			}
 
 		}, 0, _timerRefresh);
-		
+
 	}
 
 	public void Stop() {
 		if (_localTimer != null) {
 			_localTimer.cancel();
-			
+
 		}
 
 	}
-	
-	public double Evaluate(String formula, String data, int bytes){
-        int dataIndex = 0;
-        String stbyte = "";
-        int byteValue = 0;
-        for (int i = 1; i <= bytes; i++) 
-        {
 
-            stbyte = data.substring(dataIndex, 2);
-            byteValue = core.HexToInt(stbyte);
-            dataIndex += 2;
-            formula = formula.replace("{" + Integer.toString(i) + "}", Integer.toString(byteValue));
-        }
-        return eval.Evaluate(formula);
-		
-		
+	public double Evaluate(String formula, String data, int bytes) {
+		int dataIndex = 0;
+		String stbyte = "";
+		int byteValue = 0;
+		for (int i = 1; i <= bytes; i++) {
+
+			stbyte = data.substring(dataIndex, 2);
+			byteValue = core.HexToInt(stbyte);
+			dataIndex += 2;
+			formula = formula.replace("{" + Integer.toString(i) + "}",
+					Integer.toString(byteValue));
+		}
+		return eval.Evaluate(formula);
+
 	}
-	
-	public void GetPidValue(ElmBankElement elem){
+
+	public void GetPidValue(ElmBankElement elem) {
 		String result = "";
 		result = core.GetPidResponse(elem.getPid(), elem.getNumbytes());
-		//if is hex
-		if(hex.matcher(result).matches()){
-			//evaluate and pass result to gui
-			double evaluated = Evaluate(elem.getFormula(), result, elem.getNumbytes());
-			if(!elem.getMode().equals("CALC")){
+		// if is hex
+		if (hex.matcher(result).matches()) {
+			// evaluate and pass result to gui
+			double evaluated = Evaluate(elem.getFormula(), result,
+					elem.getNumbytes());
+			if (!elem.getMode().equals("CALC")) {
 				gui.SetPidValue(0, elem, evaluated);
 			}
-			
-		}
-		else{
-			//is error so pass it to the error log
+
+		} else {
+			// is error so pass it to the error log
 			gui.AddError(result);
 		}
 	}
 
 	private void TimerMethod() {
+		if(!connected)
+			_localTimer.cancel();
 		if ((_activity != null))
 			_activity.runOnUiThread(Timer_Tick);
 		else {
@@ -135,13 +139,13 @@ public class ElmMaestro {
 
 	private Runnable Timer_Tick = new Runnable() {
 		public void run() {
-			//gui
-			//++debugCounter;
-			//gui.AddError(Integer.toString(debugCounter));
-			if(_elements.size() > 0){
+			// gui
+			// ++debugCounter;
+			// gui.AddError(Integer.toString(debugCounter));
+			if (_elements.size() > 0) {
 				GetPidValue(_elements.get(0));
 			}
-			
+
 		}
 	};
 
@@ -162,13 +166,13 @@ public class ElmMaestro {
 	}
 
 	private boolean CreatePort() {
-		if (comPort == null){
+		if (comPort == null) {
 			comPort = new ConcreteCommPort();
-			ConcreteCommPort cp = (ConcreteCommPort)comPort;
+			ConcreteCommPort cp = (ConcreteCommPort) comPort;
 			cp.set_gui(gui);
 		}
 		comPort.SetPort(_port);
-		if(!comPort.FoundBluetooth()){
+		if (!comPort.FoundBluetooth()) {
 			gui.AddError("Bluetooth not found");
 			return false;
 		}
