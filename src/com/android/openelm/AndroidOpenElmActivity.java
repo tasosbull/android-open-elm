@@ -13,13 +13,21 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 
-public class AndroidOpenElmActivity extends Activity implements IGui {
+public class AndroidOpenElmActivity extends Activity implements IGui , OnClickListener {
 
 	int port = 1;
 	int elmProto = 0;
 	int bankLayout = 4;
+	ElmMaestro maestro = null;
+	TextView text = null;
+	TextView elm = null;
+	Button button = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +51,32 @@ public class AndroidOpenElmActivity extends Activity implements IGui {
 		 * (IOException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); }
 		 */
+		
+		text = (TextView)findViewById(R.id.errors);
+		button = (Button)findViewById(R.id.button);
+		elm = (TextView)findViewById(R.id.elm);
+		button.setOnClickListener(this);
+		getPrefs();
+		maestro = new ElmMaestro(this);
+		maestro.set_activity(this);
+		maestro.set_port(port);
+		maestro.set_bankLayout(bankLayout);
+		maestro.set_elmProto(elmProto);
+		maestro.set_timerRefresh(1000);
+		try {
+			if(maestro.Init())
+				maestro.Start();
+		} catch (Exception e) {
+			this.AddError(e.getMessage());
+		}
+
 	}
+	
+    public void onClick(View v) {
+    	if(v == button){
+    		maestro.Stop();
+    	}
+      }
 
 	@Override
 	public void onStart() {
@@ -69,14 +102,18 @@ public class AndroidOpenElmActivity extends Activity implements IGui {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	
+	public void SetPidValue(int bankPosition, ElmBankElement elem, double value){
+		elm.setText(elem.getShortDescription() + "  " + Double.toString(value));
+	 }
+	
 	private void elmPreferences() {
 		startActivity(new Intent(this, PreferencesFromXml.class));
 
 	}
 
 	public void AddError(String aError) {
-		// TODO Auto-generated method stub
+		text.setText(aError);
 
 	}
 

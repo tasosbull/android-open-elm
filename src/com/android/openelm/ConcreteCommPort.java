@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import com.android.openelm.interfaces.ICommPort;
+import com.android.openelm.interfaces.IGui;
+
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -18,24 +20,46 @@ public class ConcreteCommPort implements ICommPort {
 	//private boolean autoDetect = false;
 
 	private int port = 0;
+	
+	private IGui _gui = null;
+
+	public IGui get_gui() {
+		return _gui;
+	}
+
+	public void set_gui(IGui _gui) {
+		this._gui = _gui;
+	}
 
 	protected BluetoothAdapter bluetoothAdapter = null;
 
 	protected BluetoothSocket socket = null;
 
 	BluetoothDevice blueToothDevice = null;
+	
+	public void SetError(String error){
+		if(_gui != null)
+			_gui.AddError(error);
+	}
 
 	public ConcreteCommPort() {
 
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (bluetoothAdapter == null) {
-			Log.e(this.toString(), "Bluetooth Not Available.");
+			SetError("Bluetooth Not Available.");
 			return;
 		}
 		blueToothDevice = bluetoothAdapter.getRemoteDevice("00:00:00:00:00:00");
 		socket = null;
 
 	}
+	
+	 public boolean FoundBluetooth(){
+		 return (bluetoothAdapter != null);
+		 
+	 }
+	
+	
 
 	public void SetAutoDetect(boolean autoDetect) {
 		// TODO unimlemented yet
@@ -60,14 +84,13 @@ public class ConcreteCommPort implements ICommPort {
 			assert (socket != null) : "Socket is Null";
 			socket.connect();
 		} catch (IOException ex) {
-			Log.e(this.toString(), "IOException " + ex.getMessage());
+			SetError("IOException " + ex.getMessage());
 		} catch (NoSuchMethodException ex) {
-			Log.e(this.toString(), "NoSuchMethodException " + ex.getMessage());
+			SetError("NoSuchMethodException " + ex.getMessage());
 		} catch (IllegalAccessException ex) {
-			Log.e(this.toString(), "IllegalAccessException " + ex.getMessage());
+			SetError("IllegalAccessException " + ex.getMessage());
 		} catch (InvocationTargetException ex) {
-			Log.e(this.toString(),
-					"InvocationTargetException " + ex.getMessage());
+			SetError("InvocationTargetException " + ex.getMessage());
 		}
 	}
 
@@ -76,7 +99,7 @@ public class ConcreteCommPort implements ICommPort {
 			socket.close();
 		} catch (IOException e) {
 
-			Log.e(this.toString(), "IOException " + e.getMessage());
+			SetError("IOException " + e.getMessage());
 		}
 	}
 
@@ -86,7 +109,7 @@ public class ConcreteCommPort implements ICommPort {
 			mmInStream = socket.getInputStream();
 			return (mmInStream.available() > 0);	
 		} catch (IOException e) {
-			Log.e(this.toString(), "IOException " + e.getMessage());
+			SetError("IOException " + e.getMessage());
 			return false;
 		}
 		
@@ -100,7 +123,7 @@ public class ConcreteCommPort implements ICommPort {
 			OutputStream outputStream = socket.getOutputStream();
 			outputStream.write(data.getBytes());
 		} catch (IOException ex) {
-			Log.e(this.toString(), "IOException " + ex.getMessage());
+			SetError("IOException " + ex.getMessage());
 		}
 
 		return 0;
@@ -121,7 +144,7 @@ public class ConcreteCommPort implements ICommPort {
 			}
 			return total;
 		} catch (IOException e) {
-			Log.e("ReadData", "disconnected", e);
+			SetError(e.getMessage());
 			
 		}
 		return 0;

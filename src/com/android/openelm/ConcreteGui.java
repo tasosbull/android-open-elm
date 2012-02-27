@@ -31,4 +31,13 @@ public class ConcreteGui implements IGui{
 		return 0;
 	}
 
+	public void SetError(String error) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	 public void SetPidValue(int bankPosition, ElmBankElement elem, double value){
+		 
+	 }
+
 }

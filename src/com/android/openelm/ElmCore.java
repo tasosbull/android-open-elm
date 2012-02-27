@@ -519,7 +519,7 @@ public class ElmCore {
         Reset_Proc();
     }
 
-    public String GetPidResponse(String pid, int pidBytes, boolean noError)
+    public String GetPidResponse(String pid, int pidBytes)
     {
         StringBuilder buf = new StringBuilder("");
         //Globals.READ_RES response_status;
@@ -535,7 +535,7 @@ public class ElmCore {
         timer.StopTimer();
         if (errorTimeout)
         {
-            noError = false;
+            
             return "ERROR TIMEOUT";
         }
         resState = ProcessResponse(cmd, vehicle_response);
@@ -546,20 +546,20 @@ public class ElmCore {
             {
                 if (buf.length() > pidBytes * 2)
                     buf = new StringBuilder( buf.toString().substring(0, pidBytes * 2));
-                noError = true;
+                
                 return buf.toString();
             }
             else
             {
-                noError = false;
+               
                 return "ERROR INVALID RESPONSE";
             }
 
         }
         else
         {
-            noError = false;
-            return BadResponseToString(resState);
+            
+            return "ERROR " + BadResponseToString(resState);
         }
 
     }
@@ -774,7 +774,7 @@ public class ElmCore {
 
     }
 
-    public static int HexToInt(String hexStr)
+    public int HexToInt(String hexStr)
     {
     	return Integer.valueOf(hexStr, 16).intValue();
     }

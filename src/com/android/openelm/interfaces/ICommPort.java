@@ -10,5 +10,7 @@ public interface ICommPort {
     public void Flush();
     public int  WriteData(String data);
     public int  ReadData(StringBuilder data);
+    public boolean FoundBluetooth();
+    public void SetError(String error);
 
 }
