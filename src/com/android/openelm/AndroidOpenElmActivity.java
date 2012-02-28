@@ -2,10 +2,14 @@ package com.android.openelm;
 
 
 
+import java.util.List;
+
 import com.android.openelm.interfaces.IGui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,10 +21,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class AndroidOpenElmActivity extends Activity implements IGui , OnClickListener {
-
+	/*
+	 * check preferences if exists selected device 
+	 * check if device exists and if is paired
+	 * if   
+	 * 
+	 * **/
 	int port = 1;
 	int elmProto = 0;
 	int bankLayout = 4;
@@ -28,6 +38,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui , OnClickLi
 	TextView text = null;
 	TextView elm = null;
 	Button button = null;
+	int dialogSelection = -1;
+	List<String> devices = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +74,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui , OnClickLi
 	
     public void onClick(View v) {
     	if(v == button){
+    		/*
     		maestro.Stop();
     		try {
     			if(maestro.Init())
@@ -69,6 +82,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui , OnClickLi
     		} catch (Exception e) {
     			this.AddError(e.getMessage());
     		}
+    		*/
+    		test();
     	}
       }
 
@@ -85,6 +100,37 @@ public class AndroidOpenElmActivity extends Activity implements IGui , OnClickLi
 		return true;
 	}
 
+	private void ElmStart(){
+		
+		getPrefs();
+		maestro = new ElmMaestro(this);
+		maestro.set_activity(this);
+		maestro.set_port(port);
+		maestro.set_bankLayout(bankLayout);
+		maestro.set_elmProto(elmProto);
+		maestro.set_timerRefresh(1000);
+		try {
+			if(maestro.Init()){
+				devices = maestro.AvailableBluetoothDevices();
+				if(devices.size() <= 1){
+					if(maestro.Connect(devices.get(0)))
+						maestro.Start();
+				}
+				else{
+					
+				}
+				   
+				}
+		} catch (Exception e) {
+			this.AddError(e.getMessage());
+		}
+	}
+	
+	private void ElmStop(){
+		if(maestro != null)
+    		maestro.Stop();
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
@@ -93,24 +139,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui , OnClickLi
 			elmPreferences();
 			return true;
 		case R.id.elm_start:
-			getPrefs();
-			maestro = new ElmMaestro(this);
-			maestro.set_activity(this);
-			maestro.set_port(port);
-			maestro.set_bankLayout(bankLayout);
-			maestro.set_elmProto(elmProto);
-			maestro.set_timerRefresh(1000);
-			try {
-				if(maestro.Init())
-					maestro.Start();
-			} catch (Exception e) {
-				this.AddError(e.getMessage());
-			}
-	
+			ElmStart();
 			return true;
 		case R.id.elm_stop:
-			if(maestro != null)
-    		maestro.Stop();
+			ElmStop();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -156,6 +188,39 @@ public class AndroidOpenElmActivity extends Activity implements IGui , OnClickLi
 		elmProto = Integer.parseInt(prefs.getString("list_preference_proto", "0"));
 		String bankStr = prefs.getString("list_preference_bank", "4");
 		bankLayout = Integer.parseInt(bankStr);
+	}
+	
+	public int SelectSingleItemFromList(CharSequence[] availItems, String title ){
+		dialogSelection = -1;
+		final CharSequence[] items = availItems;
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(title);
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int item) {
+		    	dialog.dismiss();
+		    	dialogSelection = item;
+		    	
+		    }
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
+		return dialogSelection;
+	}
+	
+	public void test(){
+		CharSequence[] availItems = new CharSequence[2];
+		availItems[0] = "aaa";
+		availItems[1] = "bbb";
+		
+		int x = SelectSingleItemFromList(availItems, "select");
+		x++;
+		
+		
+	}
+
+	public String GetSelectedDevice() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

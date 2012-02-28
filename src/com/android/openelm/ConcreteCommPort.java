@@ -5,22 +5,25 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import com.android.openelm.interfaces.ICommPort;
 import com.android.openelm.interfaces.IGui;
 
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 public class ConcreteCommPort implements ICommPort {
 
-	//private boolean autoDetect = false;
+	// private boolean autoDetect = false;
+
+	Set<BluetoothDevice> pairedDevices = null;
 
 	private int port = 0;
-	
+
 	private IGui _gui = null;
 
 	public IGui get_gui() {
@@ -36,9 +39,9 @@ public class ConcreteCommPort implements ICommPort {
 	protected BluetoothSocket socket = null;
 
 	BluetoothDevice blueToothDevice = null;
-	
-	public void SetError(String error){
-		if(_gui != null)
+
+	public void SetError(String error) {
+		if (_gui != null)
 			_gui.AddError(error);
 	}
 
@@ -49,21 +52,18 @@ public class ConcreteCommPort implements ICommPort {
 			SetError("Bluetooth Not Available.");
 			return;
 		}
-		blueToothDevice = bluetoothAdapter.getRemoteDevice("00:00:00:00:00:00");
+		blueToothDevice = null;
 		socket = null;
+	}
+
+	public boolean FoundBluetooth() {
+		return (bluetoothAdapter != null);
 
 	}
-	
-	 public boolean FoundBluetooth(){
-		 return (bluetoothAdapter != null);
-		 
-	 }
-	
-	
 
 	public void SetAutoDetect(boolean autoDetect) {
 		// TODO unimlemented yet
-//		this.autoDetect = false;
+		// this.autoDetect = false;
 	}
 
 	public boolean GetAutoDetect() {
@@ -75,9 +75,23 @@ public class ConcreteCommPort implements ICommPort {
 		port = aCommPort;
 	}
 
-	public boolean Connect() {
+	public boolean Connect(String deviceName) {
 		bluetoothAdapter.cancelDiscovery();
+		if (deviceName == null) {
+			SetError("You must select a bluetooth device");
+			return false;
+		}
 		try {
+			for (BluetoothDevice device : pairedDevices) {
+				if (device.getName().equals(deviceName)) {
+					blueToothDevice = device;
+					break;
+				}
+			}
+			if (blueToothDevice == null) {
+				SetError("Bluetooth device is lost");
+				return false;
+			}
 			Method m = blueToothDevice.getClass().getMethod(
 					"createRfcommSocket", new Class[] { int.class });
 			socket = (BluetoothSocket) m.invoke(blueToothDevice, port);
@@ -112,12 +126,12 @@ public class ConcreteCommPort implements ICommPort {
 		InputStream mmInStream;
 		try {
 			mmInStream = socket.getInputStream();
-			return (mmInStream.available() > 0);	
+			return (mmInStream.available() > 0);
 		} catch (IOException e) {
 			SetError("IOException " + e.getMessage());
 			return false;
 		}
-		
+
 	}
 
 	public void Flush() {
@@ -150,9 +164,22 @@ public class ConcreteCommPort implements ICommPort {
 			return total;
 		} catch (IOException e) {
 			SetError(e.getMessage());
-			
+
 		}
 		return 0;
+	}
+
+	private void GetBlueToothDevices() {
+		pairedDevices = bluetoothAdapter.getBondedDevices();
+	}
+
+	public List<String> GetNameDevices() {
+		GetBlueToothDevices();
+		ArrayList<String> list = new ArrayList<String>();
+		for (BluetoothDevice device : pairedDevices) {
+			list.add(device.getName());
+		}
+		return list;
 	}
 
 }

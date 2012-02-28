@@ -40,4 +40,9 @@ public class ConcreteGui implements IGui{
 		 
 	 }
 
+	public String GetSelectedDevice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

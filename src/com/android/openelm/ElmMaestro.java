@@ -60,14 +60,26 @@ public class ElmMaestro {
 		LoadXmlElements();
 		if (!CreatePort())
 			return false;
-		if (!comPort.Connect())
-			return false;
-		connected = true;
+		//if (!comPort.Connect(gui.GetSelectedDevice()))
+		//	return false;
+		//connected = true;
 		CreateTimer();
 		core = new ElmCore(comPort, timer, gui);
-		core.FastInit();
+		
 		return true;
 
+	}
+	
+	public List<String>  AvailableBluetoothDevices(){
+		return comPort.GetNameDevices();
+	}
+	
+	public boolean Connect(String aDevice){
+		boolean result = comPort.Connect(aDevice);
+		if(result){
+			core.FastInit();
+		}
+		return result;
 	}
 
 	public void Start() {
