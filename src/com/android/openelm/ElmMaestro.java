@@ -1,3 +1,32 @@
+// *********************************************************************************
+// ***** BEGIN GPL LICENSE BLOCK *****
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software  Foundation,
+// Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+// The Original Code is Copyright (C) 2012 by Tasos Boulasikis tasosbull@gmail.com 
+// All rights reserved.
+//
+// The Original Code is: all of this file.
+//
+// Contributor(s): none yet.
+//
+// ***** END GPL LICENSE BLOCK *****
+//
+// Short description of this file
+//************************************************************************************
+
 package com.android.openelm;
 
 import java.io.IOException;
@@ -16,6 +45,7 @@ import com.android.openelm.interfaces.ITimer;
 import android.app.Activity;
 
 public class ElmMaestro {
+
 	private int _port = 1;
 	private int _elmProto = 0;
 	private int _bankLayout = 4;
@@ -24,30 +54,13 @@ public class ElmMaestro {
 	private int _currentBankElement = -1;
 	private long _timerRefresh = 5;
 	private Timer _localTimer;
-	boolean connected = false;
-	ExpressionEvaluator eval = null;
-	ICommPort comPort = null;
-	ITimer timer = null;
-	IGui gui = null;
-	ElmCore core = null;
-	int debugCounter = 0;
-	Pattern hex = Pattern.compile("^[0-9A-F]+$");
-
-	public int get_currentBankElement() {
-		return _currentBankElement;
-	}
-
-	public void set_currentBankElement(int _currentBankElement) {
-		this._currentBankElement = _currentBankElement;
-	}
-
-	public long get_timerRefresh() {
-		return _timerRefresh;
-	}
-
-	public void set_timerRefresh(long _timerRefresh) {
-		this._timerRefresh = _timerRefresh;
-	}
+	private boolean connected = false;
+	private ExpressionEvaluator eval = null;
+	private ICommPort comPort = null;
+	private ITimer timer = null;
+	private IGui gui = null;
+	private ElmCore core = null;
+	private Pattern hex = Pattern.compile("^[0-9A-F]+$");
 
 	public ElmMaestro(IGui _gui) {
 		gui = _gui;
@@ -65,7 +78,7 @@ public class ElmMaestro {
 		return true;
 	}
 	
-	public List<String>  AvailableBluetoothDevices(){
+	public List<String> AvailableBluetoothDevices(){
 		return comPort.GetNameDevices();
 	}
 	
@@ -78,7 +91,6 @@ public class ElmMaestro {
 	}
 
 	public void Disconnect(){
-		
 		comPort.Disconnect();
 	}
 	
@@ -89,7 +101,6 @@ public class ElmMaestro {
 			public void run() {
 				TimerMethod();
 			}
-
 		}, 0, _timerRefresh);
 	}
 
@@ -182,7 +193,6 @@ public class ElmMaestro {
 	private void CreateTimer() {
 		if (timer == null)
 			timer = new ConcreteTimer();
-
 	}
 
 	public int get_port() {
@@ -217,6 +227,22 @@ public class ElmMaestro {
 
 	public void set_activity(Activity _activity) {
 		this._activity = _activity;
-
 	}
+	
+	public int get_currentBankElement() {
+		return _currentBankElement;
+	}
+
+	public void set_currentBankElement(int _currentBankElement) {
+		this._currentBankElement = _currentBankElement;
+	}
+
+	public long get_timerRefresh() {
+		return _timerRefresh;
+	}
+
+	public void set_timerRefresh(long _timerRefresh) {
+		this._timerRefresh = _timerRefresh;
+	}
+
 }
