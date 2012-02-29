@@ -71,7 +71,7 @@ public class ElmMaestro {
 			throw new Exception("You must set activity first");
 		eval = new ExpressionEvaluator(_activity);
 		LoadXmlElements();
-		if (!CreatePort())
+		if(!CreatePort())
 			return false;
 		CreateTimer();
 		core = new ElmCore(comPort, timer, gui);
