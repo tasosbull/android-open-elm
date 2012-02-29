@@ -54,8 +54,8 @@ import android.widget.Toast;
 public class AndroidOpenElmActivity extends Activity implements IGui,
 		OnClickListener {
 	/*
-	 * check preferences if exists selected device check if device exists and if
-	 * is paired if
+	 * add initialize menu button
+	 * add select device menu button
 	 * 
 	 * *
 	 */
@@ -69,6 +69,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	String deviceSelected = "";
 	List<String> devices = null;
 	boolean connected = false;
+	boolean initialized = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +135,9 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		maestro.set_elmProto(elmProto);
 		maestro.set_timerRefresh(5);
 		try {
-			maestro.Init();
+			initialized = maestro.Init();
+			if(!initialized)
+				return;
 			boolean bFound = false;
 			devices = maestro.AvailableBluetoothDevices();
 			if ((devices == null) || (devices.size() == 0))
