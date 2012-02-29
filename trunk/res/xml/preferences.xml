@@ -28,8 +28,15 @@
                 android:entries="@array/elm_com_port"
                 android:entryValues="@array/elm_com_port"
                 android:dialogTitle="@string/elm_com_port" />
-
-
+                
+        <EditTextPreference
+	            android:key="device_selected"
+	            android:title="device selected"
+	            android:summary="device selected"
+	            android:dialogTitle="Device"
+	            android:dialogMessage="Provide a message"   
+	            android:defaultValue="" />
+                
     </PreferenceCategory>
 
 </PreferenceScreen>
