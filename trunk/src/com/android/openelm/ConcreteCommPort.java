@@ -17,9 +17,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
 public class ConcreteCommPort implements ICommPort {
-
-	// private boolean autoDetect = false;
-
 	Set<BluetoothDevice> pairedDevices = null;
 
 	private int port = 0;
@@ -62,8 +59,6 @@ public class ConcreteCommPort implements ICommPort {
 	}
 
 	public void SetAutoDetect(boolean autoDetect) {
-		// TODO unimlemented yet
-		// this.autoDetect = false;
 	}
 
 	public boolean GetAutoDetect() {
@@ -131,7 +126,6 @@ public class ConcreteCommPort implements ICommPort {
 			SetError("IOException " + e.getMessage());
 			return false;
 		}
-
 	}
 
 	public void Flush() {
