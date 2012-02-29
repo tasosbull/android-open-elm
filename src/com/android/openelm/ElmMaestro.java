@@ -60,14 +60,9 @@ public class ElmMaestro {
 		LoadXmlElements();
 		if (!CreatePort())
 			return false;
-		//if (!comPort.Connect(gui.GetSelectedDevice()))
-		//	return false;
-		//connected = true;
 		CreateTimer();
 		core = new ElmCore(comPort, timer, gui);
-		
 		return true;
-
 	}
 	
 	public List<String>  AvailableBluetoothDevices(){
@@ -82,8 +77,12 @@ public class ElmMaestro {
 		return result;
 	}
 
+	public void Disconnect(){
+		
+		comPort.Disconnect();
+	}
+	
 	public void Start() {
-
 		_localTimer = new Timer();
 		_localTimer.schedule(new TimerTask() {
 			@Override
@@ -92,15 +91,12 @@ public class ElmMaestro {
 			}
 
 		}, 0, _timerRefresh);
-
 	}
 
 	public void Stop() {
 		if (_localTimer != null) {
 			_localTimer.cancel();
-
 		}
-
 	}
 
 	public double Evaluate(String formula, String data, int bytes) {
@@ -108,7 +104,6 @@ public class ElmMaestro {
 		String stbyte = "";
 		int byteValue = 0;
 		for (int i = 1; i <= bytes; i++) {
-
 			stbyte = data.substring(dataIndex, 2);
 			byteValue = core.HexToInt(stbyte);
 			dataIndex += 2;
@@ -116,15 +111,12 @@ public class ElmMaestro {
 					Integer.toString(byteValue));
 		}
 		return eval.Evaluate(formula);
-
 	}
 
 	public void GetPidValue(ElmBankElement elem) {
 		String result = "";
 		result = core.GetPidResponse(elem.getPid(), elem.getNumbytes());
-		// if is hex
 		if (hex.matcher(result).matches()) {
-			// evaluate and pass result to gui
 			double evaluated = Evaluate(elem.getFormula(), result,
 					elem.getNumbytes());
 			if (!elem.getMode().equals("CALC")) {
@@ -132,7 +124,6 @@ public class ElmMaestro {
 			}
 
 		} else {
-			// is error so pass it to the error log
 			gui.AddError(result);
 		}
 	}
@@ -151,13 +142,10 @@ public class ElmMaestro {
 
 	private Runnable Timer_Tick = new Runnable() {
 		public void run() {
-			// gui
-			// ++debugCounter;
-			// gui.AddError(Integer.toString(debugCounter));
+			//dummy
 			if (_elements.size() > 0) {
 				GetPidValue(_elements.get(0));
 			}
-
 		}
 	};
 
