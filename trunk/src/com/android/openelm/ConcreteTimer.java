@@ -29,24 +29,36 @@
 
 package com.android.openelm;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.android.openelm.interfaces.ITimer;
 
 import android.os.CountDownTimer;
 
 public class ConcreteTimer implements ITimer {
 
-	boolean started ;
-    boolean errorTimeout = false;
-    int timerTimeout = 0;
-    int interval = 0;
-	
-	ElmCountDownTimer timer = null;
-	
+	boolean started;
+	boolean errorTimeout = false;
+
+	public boolean isErrorTimeout() {
+		return errorTimeout;
+	}
+
+	public void setErrorTimeout(boolean errorTimeout) {
+		this.errorTimeout = errorTimeout;
+	}
+
+	int timerTimeout = 0;
+	int interval = 0;
+
+	Timer timer = null;
 
 	public void SetTimerInterval(int aInterval) {
 		interval = aInterval;
-		
+
 	}
+
 	public boolean TimerStarted() {
 		return started;
 
@@ -55,33 +67,26 @@ public class ConcreteTimer implements ITimer {
 	public void StartTimer() {
 		started = true;
 		errorTimeout = false;
-		timer = new ElmCountDownTimer(interval,  interval); 
-		timer.start();
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				TimerMethod();
+			}
+		}, 0, interval);
+	}
+
+	private void TimerMethod() {
+		errorTimeout = true;
+		started = false;
+		timer.cancel();
+
 	}
 
 	public void StopTimer() {
 		timer.cancel();
 		started = false;
-	}
-
-
-	public final class ElmCountDownTimer extends CountDownTimer {
-		public ElmCountDownTimer(long millisInFuture, long countDownInterval) {
-			super(millisInFuture, countDownInterval);
-		}
-
-		@Override
-		public void onTick(long millisUntilFinished) {
-			errorTimeout = true;
-			started = false;
-			this.cancel();
-
-		}
-
-		@Override
-		public void onFinish() {
-		}
-
+		errorTimeout = false;
 	}
 
 }

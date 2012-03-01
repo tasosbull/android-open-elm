@@ -34,5 +34,6 @@ public interface ITimer {
     public  void  StartTimer();
     public  void  StopTimer();
     public  void SetTimerInterval(int interval);  
+    public boolean isErrorTimeout() ;
 
 }

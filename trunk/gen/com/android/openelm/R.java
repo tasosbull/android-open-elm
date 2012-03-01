@@ -26,10 +26,11 @@ public final class R {
     public static final class id {
         public static final int button=0x7f080002;
         public static final int elm=0x7f080000;
-        public static final int elm_exit=0x7f080006;
+        public static final int elm_exit=0x7f080007;
         public static final int elm_preferences=0x7f080003;
-        public static final int elm_start=0x7f080004;
-        public static final int elm_stop=0x7f080005;
+        public static final int elm_selectdevice=0x7f080004;
+        public static final int elm_start=0x7f080005;
+        public static final int elm_stop=0x7f080006;
         public static final int errors=0x7f080001;
     }
     public static final class layout {
@@ -59,6 +60,7 @@ public final class R {
         public static final int elm_proto_J1850_2=0x7f06000b;
         public static final int elm_proto_auto=0x7f060009;
         public static final int elm_proto_setup=0x7f060008;
+        public static final int elm_selectdevice=0x7f060017;
         public static final int elm_start=0x7f060003;
         public static final int elm_stop=0x7f060004;
         public static final int hello=0x7f060000;
