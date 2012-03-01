@@ -29,6 +29,7 @@
 
 package com.android.openelm.interfaces;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ICommPort {
@@ -37,7 +38,7 @@ public interface ICommPort {
 	public void SetPort(int aCommPort);
     public boolean Connect(String device);
     public void Disconnect();
-    public boolean HasData();
+    public boolean HasData() throws IOException;
     public void Flush();
     public int  WriteData(String data);
     public int  ReadData(StringBuilder data);

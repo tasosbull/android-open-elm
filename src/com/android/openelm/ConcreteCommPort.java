@@ -146,15 +146,12 @@ public class ConcreteCommPort implements ICommPort {
 		}
 	}
 
-	public boolean HasData() {
+	public boolean HasData() throws IOException {
 		InputStream mmInStream;
-		try {
-			mmInStream = socket.getInputStream();
-			return (mmInStream.available() > 0);
-		} catch (IOException e) {
-			SetError("IOException " + e.getMessage());
-			return false;
-		}
+
+		mmInStream = socket.getInputStream();
+		boolean result = (mmInStream.available() > 0);
+		return result;
 	}
 
 	public void Flush() {

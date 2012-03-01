@@ -54,8 +54,7 @@ import android.widget.Toast;
 public class AndroidOpenElmActivity extends Activity implements IGui,
 		OnClickListener {
 	/*
-	 * add initialize menu button
-	 * add select device menu button
+	 * add initialize menu button add select device menu button
 	 * 
 	 * *
 	 */
@@ -94,6 +93,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		 * e.printStackTrace(); }
 		 */
 
+		
+		
 		text = (TextView) findViewById(R.id.errors);
 		button = (Button) findViewById(R.id.button);
 		elm = (TextView) findViewById(R.id.elm);
@@ -136,7 +137,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		maestro.set_timerRefresh(5);
 		try {
 			initialized = maestro.Init();
-			if(!initialized)
+			if (!initialized)
 				return;
 			boolean bFound = false;
 			devices = maestro.AvailableBluetoothDevices();
@@ -171,6 +172,13 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		}
 	}
 
+	private void SelectDevice() {
+		CharSequence[] availItems = new CharSequence[devices.size()];
+		for (int i = 0; i < devices.size(); i++)
+			availItems[i] = devices.get(i);
+		SelectSingleItemFromList(availItems, "Select device");
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
@@ -183,6 +191,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			return true;
 		case R.id.elm_stop:
 			ElmStop();
+			return true;
+		case R.id.elm_selectdevice:
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -205,6 +215,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 
 	public void ProcMessages() {
 		// TODO Auto-generated method stub
+		for(int i = 0 ; i < 10; ++i)
+			;
 
 	}
 

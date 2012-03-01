@@ -27,6 +27,7 @@
 // Short description of this file
 //************************************************************************************
 
+
 package com.android.openelm;
 
 import java.io.IOException;
@@ -140,7 +141,7 @@ public class ElmMaestro {
 	}
 
 	private void TimerMethod() {
-		if(!connected)
+		if (!connected)
 			_localTimer.cancel();
 		if ((_activity != null))
 			_activity.runOnUiThread(Timer_Tick);
