@@ -25,6 +25,9 @@
     <string name="elm_com_port">Com port</string>
     <string name="elm_com_port_setup">Com port setup</string>
     <string name="elm_selectdevice">Select Device</string>
+    <string name="elm_connect">Connect</string>
+    
+    
 
 
 

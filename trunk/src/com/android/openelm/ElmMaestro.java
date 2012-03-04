@@ -110,6 +110,11 @@ public class ElmMaestro {
 			_localTimer.cancel();
 		}
 	}
+	
+	public String GetCommandResult(String command) {
+		return core.GetCommandResult(command);
+		
+	}
 
 	public double Evaluate(String formula, String data, int bytes) {
 		int dataIndex = 0;

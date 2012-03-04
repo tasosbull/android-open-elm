@@ -83,6 +83,22 @@ public class ElmCore {
 		return comm.ReadData(response);
 
 	}
+	
+	public String GetCommandResult(String command) {
+		StringBuilder buf = new StringBuilder("");
+		SendCommand(command); // reset the chip
+		Globals.TIMEOUTS gt = Globals.TIMEOUTS.ATZ_TIMEOUT;
+		timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
+		timer.StartTimer();
+		ReadPort(buf);
+		timer.StopTimer();
+		if (timer.isErrorTimeout()) {
+			gui.AddError(cmd + " command" + " failed...");
+			return "Error Timeout";
+		}
+		return buf.toString();
+
+	}
 
 	public void SendCommandNoRead(String cmd) {
 		StringBuilder buf = new StringBuilder("");
@@ -108,8 +124,9 @@ public class ElmCore {
 			if (timer.isErrorTimeout())
 				return Globals.READ_RES.READ_ERROR;
 			comm.ReadData(tmp);
-			response.append(tmp);
-			prompt = tmp.indexOf(">") >= 0;
+			String s = tmp.toString();
+			response.append(s);
+			prompt = s.indexOf(">") >= 0;
 			escape = (prompt || timer.isErrorTimeout());
 
 		}
@@ -127,6 +144,7 @@ public class ElmCore {
 	public void FastInit() {
 		SendCommandNoRead("atz");
 		SendCommandNoRead("ate0");
+		SendCommandNoRead("ate0");
 		SendCommandNoRead("atl0");
 	}
 
@@ -136,7 +154,7 @@ public class ElmCore {
 		boolean echo_on = true; // echo status
 		boolean is_hex_num = true;
 		StringBuilder temp_buf = new StringBuilder("");
-		echo_on = msg_received.indexOf(cmd_sent) >= 0;
+		echo_on = msg_received.toString().indexOf(cmd_sent) >= 0;
 		if (echo_on) {
 			msg_received = new StringBuilder(msg_received.toString().substring(
 					cmd_sent.length(),
@@ -256,15 +274,19 @@ public class ElmCore {
 
 	}
 
-	protected boolean IsValidResponse(String buf, String response, String filter) {
+	protected boolean IsValidResponse(StringBuilder strbuf, String response,
+			String filter) {
 		boolean res = false;
-		buf = response;
+
+		String buf = response;
 		buf = buf.trim();
 		buf = buf.replace("\t", "");
 		res = (buf.indexOf(filter) == 0);
 		if (res)
+
 			buf = buf
 					.substring(filter.length(), buf.length() - filter.length());
+		strbuf = new StringBuilder(buf);
 		return res;
 	}
 
@@ -517,6 +539,7 @@ public class ElmCore {
 		timer.StartTimer();
 		/* response_status = */ReadPort(vehicle_response);
 		timer.StopTimer();
+		String vr = vehicle_response.toString();
 		if (timer.isErrorTimeout()) {
 
 			return "ERROR TIMEOUT";
@@ -524,9 +547,10 @@ public class ElmCore {
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "41" + pid;
-			if (IsValidResponse(buf.toString(), vehicle_response.toString(),
-					cmd)) {
-				if (buf.length() > pidBytes * 2)
+			String s = buf.toString();
+			String v = vehicle_response.toString();
+			if (IsValidResponse(buf, v, cmd)) {
+				if (buf.toString().length() > pidBytes * 2)
 					buf = new StringBuilder(buf.toString().substring(0,
 							pidBytes * 2));
 
@@ -563,8 +587,7 @@ public class ElmCore {
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "4101";
-			if (IsValidResponse(buf.toString(), vehicle_response.toString(),
-					cmd)) {
+			if (IsValidResponse(buf, vehicle_response.toString(), cmd)) {
 				if (buf.length() > 2) {
 					String tmp = buf.substring(0, 2);
 					int itmp = HexToInt(tmp);
@@ -643,8 +666,7 @@ public class ElmCore {
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "44";
-			if (IsValidResponse(buf.toString(), vehicle_response.toString(),
-					cmd)) {
+			if (IsValidResponse(buf, vehicle_response.toString(), cmd)) {
 				noError = true;
 				return;
 			}
@@ -673,8 +695,7 @@ public class ElmCore {
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "43";
-			if (IsValidResponse(buf.toString(), vehicle_response.toString(),
-					cmd)) {
+			if (IsValidResponse(buf, vehicle_response.toString(), cmd)) {
 				int cnt = buf.length() / 4;
 				for (int i = 0; i < cnt; i++) {
 					String tmp = buf.substring(i * 4, 4);

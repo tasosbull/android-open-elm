@@ -177,10 +177,11 @@ public class ConcreteCommPort implements ICommPort {
 			mmInStream = socket.getInputStream();
 			bytes = mmInStream.read(buffer);
 			total += bytes;
-			while (bytes > 0) {
+			while ((bytes > 0)&&(HasData())) {
 				bytes = mmInStream.read(buffer);
 				total += bytes;
 			}
+			data.append(new String(buffer));
 			return total;
 		} catch (IOException e) {
 			SetError(e.getMessage());

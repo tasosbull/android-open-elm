@@ -42,12 +42,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +65,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	int elmProto = 0;
 	int bankLayout = 4;
 	ElmMaestro maestro = null;
+	EditText edittext = null;
 	TextView text = null;
 	TextView elm = null;
 	Button button = null;
@@ -93,12 +97,11 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		 * e.printStackTrace(); }
 		 */
 
-		
-		
 		text = (TextView) findViewById(R.id.errors);
 		button = (Button) findViewById(R.id.button);
 		elm = (TextView) findViewById(R.id.elm);
 		button.setOnClickListener(this);
+		edittext = (EditText) findViewById(R.id.edittext);
 
 		InitMaestro();
 
@@ -110,7 +113,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			 * maestro.Stop(); try { if(maestro.Init()) maestro.Start(); } catch
 			 * (Exception e) { this.AddError(e.getMessage()); }
 			 */
-
+			String command = edittext.getText().toString();
+			String result = maestro.GetCommandResult(command);
+			elm.setText(result);
+			
 		}
 	}
 
@@ -160,7 +166,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	private void ElmStart() {
-		connected = maestro.Connect(deviceSelected);
+		if(!connected)
+			connected = maestro.Connect(deviceSelected);
 		if (connected)
 			maestro.Start();
 	}
@@ -194,6 +201,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			return true;
 		case R.id.elm_selectdevice:
 			return true;
+		case R.id.elm_connect:
+			if(!connected)
+				connected = maestro.Connect(deviceSelected);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -215,7 +226,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 
 	public void ProcMessages() {
 		// TODO Auto-generated method stub
-		for(int i = 0 ; i < 10; ++i)
+		for (int i = 0; i < 10; ++i)
 			;
 
 	}
