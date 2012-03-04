@@ -5,6 +5,8 @@
         android:title="@string/elm_preferences" />
     <item android:id="@+id/elm_selectdevice"
         android:title="@string/elm_selectdevice" />
+    <item android:id="@+id/elm_connect"
+        android:title="@string/elm_connect" />
     <item android:id="@+id/elm_start"
         android:title="@string/elm_start" />
     <item android:id="@+id/elm_stop"
