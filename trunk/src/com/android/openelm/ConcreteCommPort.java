@@ -161,6 +161,7 @@ public class ConcreteCommPort implements ICommPort {
 		try {
 			OutputStream outputStream = socket.getOutputStream();
 			outputStream.write(data.getBytes());
+			outputStream.flush();
 		} catch (IOException ex) {
 			SetError("IOException " + ex.getMessage());
 		}

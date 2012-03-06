@@ -96,26 +96,22 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		 * (IOException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); }
 		 */
-
-		text = (TextView) findViewById(R.id.errors);
-		button = (Button) findViewById(R.id.button);
 		elm = (TextView) findViewById(R.id.elm);
-		button.setOnClickListener(this);
 		edittext = (EditText) findViewById(R.id.edittext);
-
+		button = (Button) findViewById(R.id.button);
+		button.setOnClickListener(this);
 		InitMaestro();
 
 	}
 
 	public void onClick(View v) {
 		if (v == button) {
-			/*
-			 * maestro.Stop(); try { if(maestro.Init()) maestro.Start(); } catch
-			 * (Exception e) { this.AddError(e.getMessage()); }
-			 */
+			if(!connected)
+				return;
 			String command = edittext.getText().toString();
 			String result = maestro.GetCommandResult(command);
 			elm.setText(result);
+		
 			
 		}
 	}
