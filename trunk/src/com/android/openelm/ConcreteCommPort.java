@@ -168,6 +168,10 @@ public class ConcreteCommPort implements ICommPort {
 
 		return 0;
 	}
+	
+	
+	
+	
 
 	public int ReadData(StringBuilder data) {
 		byte[] buffer = new byte[1024];
