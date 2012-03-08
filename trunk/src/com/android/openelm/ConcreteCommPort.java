@@ -95,6 +95,7 @@ public class ConcreteCommPort implements ICommPort {
 		return false;
 	}
 
+	
 	public void SetPort(int aCommPort) {
 		port = aCommPort;
 	}
@@ -174,6 +175,7 @@ public class ConcreteCommPort implements ICommPort {
 	
 
 	public int ReadData(StringBuilder data) {
+		
 		byte[] buffer = new byte[1024];
 		int bytes;
 		int total = 0;
@@ -182,17 +184,19 @@ public class ConcreteCommPort implements ICommPort {
 			mmInStream = socket.getInputStream();
 			bytes = mmInStream.read(buffer);
 			total += bytes;
-			while ((bytes > 0)&&(HasData())) {
+			while ((HasData())) {
 				bytes = mmInStream.read(buffer);
 				total += bytes;
 			}
 			data.append(new String(buffer));
-			return total;
+			String str = data.toString();
+			str = str;
+			
 		} catch (IOException e) {
 			SetError(e.getMessage());
 
 		}
-		return 0;
+		return total;
 	}
 
 	private void GetBlueToothDevices() {

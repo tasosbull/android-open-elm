@@ -87,7 +87,7 @@ public class ElmCore {
 	public String GetCommandResult(String command) {
 		StringBuilder buf = new StringBuilder("");
 		SendCommand(command); // reset the chip
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.ATZ_TIMEOUT;
+		Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
 		timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
 		timer.StartTimer();
 		ReadPort(buf);
@@ -116,17 +116,18 @@ public class ElmCore {
 	}
 
 	public Globals.READ_RES ReadPort(StringBuilder response) {
-		StringBuilder tmp = new StringBuilder("");
 		boolean escape = false;
 		boolean prompt = false;
 		while (!escape) {
 			Wait();
 			if (timer.isErrorTimeout())
 				return Globals.READ_RES.READ_ERROR;
+			StringBuilder tmp = new StringBuilder("");
 			comm.ReadData(tmp);
 			String s = tmp.toString();
 			response.append(s);
-			prompt = s.indexOf(">") >= 0;
+			if(s != null)
+				prompt = s.indexOf(">") >= 0;
 			escape = (prompt || timer.isErrorTimeout());
 
 		}
@@ -135,7 +136,7 @@ public class ElmCore {
 		}
 
 		else {
-			gui.AddError("PORT_READ_ERROR");
+			//gui.AddError("PORT_READ_ERROR");
 			return Globals.READ_RES.READ_ERROR;
 		}
 
@@ -143,7 +144,6 @@ public class ElmCore {
 
 	public void FastInit() {
 		SendCommandNoRead("atz");
-		SendCommandNoRead("ate0");
 		SendCommandNoRead("ate0");
 		SendCommandNoRead("atl0");
 	}
