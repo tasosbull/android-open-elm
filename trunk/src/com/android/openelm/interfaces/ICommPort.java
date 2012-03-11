@@ -38,7 +38,7 @@ public interface ICommPort {
 	public void SetPort(int aCommPort);
     public boolean Connect(String device);
     public void Disconnect();
-    public boolean HasData() throws IOException;
+    public int HasData() throws IOException;
     public void Flush();
     public int  WriteData(String data);
     public int  ReadData(StringBuilder data);

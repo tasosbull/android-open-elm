@@ -9,6 +9,17 @@
         android:layout_height="wrap_content" />
 <Button
       android:id="@+id/button"
+      android:text="write and read"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content" />
+<Button
+      android:id="@+id/button_write"
+      android:layout_width="fill_parent"
+      android:text="write"
+      android:layout_height="wrap_content" />
+<Button
+      android:id="@+id/button_read"
+      android:text="read"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content" />
 <TextView 

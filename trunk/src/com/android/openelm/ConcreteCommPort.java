@@ -147,12 +147,12 @@ public class ConcreteCommPort implements ICommPort {
 		}
 	}
 
-	public boolean HasData() throws IOException {
+	public int HasData() throws IOException {
 		InputStream mmInStream;
 
 		mmInStream = socket.getInputStream();
-		boolean result = (mmInStream.available() > 0);
-		return result;
+		return mmInStream.available();
+		
 	}
 
 	public void Flush() {
@@ -161,8 +161,8 @@ public class ConcreteCommPort implements ICommPort {
 	public int WriteData(String data) {
 		try {
 			OutputStream outputStream = socket.getOutputStream();
-			outputStream.flush();
 			outputStream.write(data.getBytes());
+			outputStream.flush();
 		} catch (IOException ex) {
 			SetError("IOException " + ex.getMessage());
 		}
@@ -170,31 +170,24 @@ public class ConcreteCommPort implements ICommPort {
 		return 0;
 	}
 	
-	
-	
-	
-
 	public int ReadData(StringBuilder data) {
-		
-		byte[] buffer = new byte[1024];
 		int bytes;
 		int total = 0;
 		InputStream mmInStream = null;
 		try {
 			mmInStream = socket.getInputStream();
-			bytes = mmInStream.read(buffer);
-			total += bytes;
-			while ((HasData())) {
+			byte[] buffer ;
+			total = 0;
+			int i;
+			while ((i = HasData()) > 0) {
+				buffer = new byte[i];
 				bytes = mmInStream.read(buffer);
+				data.append(new String(buffer));
 				total += bytes;
 			}
-			data.append(new String(buffer));
-			String str = data.toString();
-			str = str;
-			
+
 		} catch (IOException e) {
 			SetError(e.getMessage());
-
 		}
 		return total;
 	}
