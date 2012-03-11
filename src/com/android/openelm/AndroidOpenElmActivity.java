@@ -69,6 +69,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	TextView text = null;
 	TextView elm = null;
 	Button button = null;
+	Button button_write = null;
+	Button button_read = null;
 	String deviceSelected = "";
 	List<String> devices = null;
 	boolean connected = false;
@@ -99,6 +101,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		elm = (TextView) findViewById(R.id.elm);
 		edittext = (EditText) findViewById(R.id.edittext);
 		button = (Button) findViewById(R.id.button);
+		button_write = (Button) findViewById(R.id.button_write);
+		button_read = (Button) findViewById(R.id.button_read);
 		button.setOnClickListener(this);
 		InitMaestro();
 
@@ -113,6 +117,15 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			elm.setText(result);
 		
 			
+		}
+		else if(v == button_read){
+			StringBuilder b = new StringBuilder();
+			maestro.core.ReadPort(b);
+			elm.setText(b.toString());
+			
+		}
+		else if(v == button_write){
+			maestro.core.SendCommand(elm.getText().toString());
 		}
 	}
 

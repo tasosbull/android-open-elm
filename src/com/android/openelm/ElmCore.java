@@ -56,14 +56,20 @@ public class ElmCore {
 	}
 
 	public void SendCommand(String command) {
+		//Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
+		//timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
+		//timer.StartTimer();
+		
+		//StringBuilder buf = new StringBuilder("");
+		//ReadPort(buf);
 		command += '\r';
-		comm.Flush();
+		//comm.Flush();
 		comm.WriteData(command);
 	}
 
 	protected void Wait() {
 		try {
-			while ((!comm.HasData()) && (!timer.isErrorTimeout()))
+			while ((comm.HasData()<=0 ) && (!timer.isErrorTimeout()))
 				gui.ProcMessages();
 		} catch (IOException e) {
 			gui.AddError(e.getMessage());
@@ -86,9 +92,9 @@ public class ElmCore {
 	
 	public String GetCommandResult(String command) {
 		StringBuilder buf = new StringBuilder("");
-		SendCommand(command); // reset the chip
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
+		SendCommand(command); 
+		Globals.TIMEOUTS gt = Globals.TIMEOUTS.ATZ_TIMEOUT;
+		timer.SetTimerInterval(gt.getTIMEOUTS());
 		timer.StartTimer();
 		ReadPort(buf);
 		timer.StopTimer();

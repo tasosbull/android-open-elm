@@ -60,7 +60,7 @@ public class ElmMaestro {
 	private ICommPort comPort = null;
 	private ITimer timer = null;
 	private IGui gui = null;
-	private ElmCore core = null;
+	public ElmCore core = null;
 	private Pattern hex = Pattern.compile("^[0-9A-F]+$");
 
 	public ElmMaestro(IGui _gui) {
