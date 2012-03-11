@@ -65,6 +65,7 @@ public class Globals {
         ATZ_TIMEOUT(1500),
         AT_TIMEOUT(1500),
         ECU_TIMEOUT(5000),
+        MAX_TIMEOUT(30000),
         DUMMY (80);
         private int code;
 
