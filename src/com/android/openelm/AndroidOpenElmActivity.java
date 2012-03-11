@@ -104,6 +104,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		button_write = (Button) findViewById(R.id.button_write);
 		button_read = (Button) findViewById(R.id.button_read);
 		button.setOnClickListener(this);
+		button_read.setOnClickListener(this);
+		button_write.setOnClickListener(this);
 		InitMaestro();
 
 	}
@@ -119,13 +121,21 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			
 		}
 		else if(v == button_read){
+			if(!connected)
+				return;
 			StringBuilder b = new StringBuilder();
+			Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
+			maestro.core.timer.SetTimerInterval(gt.getTIMEOUTS());
+			maestro.core.timer.StartTimer();
 			maestro.core.ReadPort(b);
+			maestro.core.timer.StopTimer();
 			elm.setText(b.toString());
 			
 		}
 		else if(v == button_write){
-			maestro.core.SendCommand(elm.getText().toString());
+			if(!connected)
+				return;
+			maestro.core.SendCommand(edittext.getText().toString());
 		}
 	}
 

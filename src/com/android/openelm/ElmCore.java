@@ -46,7 +46,7 @@ public class ElmCore {
 	public Globals.RESETSTATE state;
 
 	ICommPort comm;
-	ITimer timer;
+	public ITimer timer;
 	IGui gui;
 
 	public ElmCore(ICommPort aCommPort, ITimer aTimer, IGui aGui) {
@@ -56,20 +56,20 @@ public class ElmCore {
 	}
 
 	public void SendCommand(String command) {
-		//Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
-		//timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
-		//timer.StartTimer();
-		
-		//StringBuilder buf = new StringBuilder("");
-		//ReadPort(buf);
+		// Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
+		// timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
+		// timer.StartTimer();
+
+		// StringBuilder buf = new StringBuilder("");
+		// ReadPort(buf);
 		command += '\r';
-		//comm.Flush();
+		// comm.Flush();
 		comm.WriteData(command);
 	}
 
 	protected void Wait() {
 		try {
-			while ((comm.HasData()<=0 ) && (!timer.isErrorTimeout()))
+			while ((comm.HasData() <= 0) && (!timer.isErrorTimeout()))
 				gui.ProcMessages();
 		} catch (IOException e) {
 			gui.AddError(e.getMessage());
@@ -89,11 +89,11 @@ public class ElmCore {
 		return comm.ReadData(response);
 
 	}
-	
+
 	public String GetCommandResult(String command) {
 		StringBuilder buf = new StringBuilder("");
-		SendCommand(command); 
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.ATZ_TIMEOUT;
+		SendCommand(command);
+		Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
 		timer.SetTimerInterval(gt.getTIMEOUTS());
 		timer.StartTimer();
 		ReadPort(buf);
@@ -109,7 +109,7 @@ public class ElmCore {
 	public void SendCommandNoRead(String cmd) {
 		StringBuilder buf = new StringBuilder("");
 		SendCommand(cmd); // reset the chip
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.ATZ_TIMEOUT;
+		Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
 		timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
 		timer.StartTimer();
 		ReadPort(buf);
@@ -126,23 +126,21 @@ public class ElmCore {
 		boolean prompt = false;
 		while (!escape) {
 			Wait();
-			if (timer.isErrorTimeout())
-				return Globals.READ_RES.READ_ERROR;
 			StringBuilder tmp = new StringBuilder("");
 			comm.ReadData(tmp);
 			String s = tmp.toString();
-			response.append(s);
-			if(s != null)
+			if ((s != null) && (!s.equals(""))) {
+				response.append(s);
 				prompt = s.indexOf(">") >= 0;
+			}
 			escape = (prompt || timer.isErrorTimeout());
-
 		}
 		if (prompt) {
 			return Globals.READ_RES.PROMPT;
 		}
 
 		else {
-			//gui.AddError("PORT_READ_ERROR");
+			// gui.AddError("PORT_READ_ERROR");
 			return Globals.READ_RES.READ_ERROR;
 		}
 
@@ -166,7 +164,7 @@ public class ElmCore {
 					cmd_sent.length(),
 					msg_received.toString().length() - cmd_sent.length()));
 			SendCommand("ate0"); // turn off echo
-			Globals.TIMEOUTS gt = Globals.TIMEOUTS.AT_TIMEOUT;
+			Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
 			timer.SetTimerInterval(gt.getTIMEOUTS());
 			timer.StartTimer();
 			Globals.READ_RES res = ReadPort(temp_buf);
