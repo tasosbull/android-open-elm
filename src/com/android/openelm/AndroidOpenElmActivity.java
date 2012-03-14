@@ -124,11 +124,11 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			if(!connected)
 				return;
 			StringBuilder b = new StringBuilder();
-			Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
-			maestro.core.timer.SetTimerInterval(gt.getTIMEOUTS());
-			maestro.core.timer.StartTimer();
+			//Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
+			//maestro.core.timer.SetTimerInterval(gt.getTIMEOUTS());
+			//maestro.core.timer.StartTimer();
 			maestro.core.ReadPort(b);
-			maestro.core.timer.StopTimer();
+			//maestro.core.timer.StopTimer();
 			elm.setText(b.toString());
 			
 		}

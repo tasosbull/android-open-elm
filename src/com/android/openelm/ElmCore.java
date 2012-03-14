@@ -93,15 +93,15 @@ public class ElmCore {
 	public String GetCommandResult(String command) {
 		StringBuilder buf = new StringBuilder("");
 		SendCommand(command);
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS());
-		timer.StartTimer();
+		//Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
+		//timer.SetTimerInterval(gt.getTIMEOUTS());
+		//timer.StartTimer();
 		ReadPort(buf);
-		timer.StopTimer();
-		if (timer.isErrorTimeout()) {
-			gui.AddError(cmd + " command" + " failed...");
-			return "Error Timeout";
-		}
+		//timer.StopTimer();
+		//if (timer.isErrorTimeout()) {
+		//	gui.AddError(cmd + " command" + " failed...");
+		//	return "Error Timeout";
+		//}
 		return buf.toString();
 
 	}
@@ -109,15 +109,15 @@ public class ElmCore {
 	public void SendCommandNoRead(String cmd) {
 		StringBuilder buf = new StringBuilder("");
 		SendCommand(cmd); // reset the chip
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
-		timer.StartTimer();
+		//Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
+		//timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
+		//timer.StartTimer();
 		ReadPort(buf);
-		timer.StopTimer();
-		if (timer.isErrorTimeout()) {
-			gui.AddError(cmd + " command" + " failed...");
-			return;
-		}
+		//timer.StopTimer();
+		//if (timer.isErrorTimeout()) {
+		//	gui.AddError(cmd + " command" + " failed...");
+		//	return;
+		//}
 
 	}
 
@@ -125,7 +125,7 @@ public class ElmCore {
 		boolean escape = false;
 		boolean prompt = false;
 		while (!escape) {
-			Wait();
+			//Wait();
 			StringBuilder tmp = new StringBuilder("");
 			comm.ReadData(tmp);
 			String s = tmp.toString();
@@ -133,7 +133,7 @@ public class ElmCore {
 				response.append(s);
 				prompt = s.indexOf(">") >= 0;
 			}
-			escape = (prompt || timer.isErrorTimeout());
+			escape = (prompt /*|| timer.isErrorTimeout()*/);
 		}
 		if (prompt) {
 			return Globals.READ_RES.PROMPT;
