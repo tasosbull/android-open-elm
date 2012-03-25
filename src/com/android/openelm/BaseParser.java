@@ -61,6 +61,7 @@ public class BaseParser implements IParser {
 	static final String WARNING = "warning";
 	static final String ERROR = "error";
 	static final String FORMULA = "formula";
+	static final String VALUE_FACTOR="value_factor";
 	static final String GAUGE_ANALOG = "gauge_analog";
 	static final String GAUGE_NOTCHES_TOTAL = "gauge_notches_total";
 	static final String GAUGE_NOTCHES_INCREMENT_LARGE = "gauge_notches_increment_large";
@@ -146,6 +147,9 @@ public class BaseParser implements IParser {
 				}
 				else if(currentTag.equals(FORMULA)){
 					current.setFormula(xpp.getText());
+				}
+				else if(currentTag.equals(VALUE_FACTOR)){
+					current.setValuefactor(Double.parseDouble(xpp.getText()));
 				}
 				else if(currentTag.equals(GAUGE_ANALOG)){
 					boolean b = Integer.parseInt(xpp.getText()) != 0;

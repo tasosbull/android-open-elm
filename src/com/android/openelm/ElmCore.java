@@ -37,9 +37,6 @@ import com.android.openelm.interfaces.IGui;
 import com.android.openelm.interfaces.ITimer;
 
 public class ElmCore {
-
-	// public boolean errorTimeout;
-	private Globals.PROC_RES _device;
 	private StringBuilder vehicle_response;
 	private String cmd;
 	public String resetError;
@@ -56,14 +53,7 @@ public class ElmCore {
 	}
 
 	public void SendCommand(String command) {
-		// Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
-		// timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
-		// timer.StartTimer();
-
-		// StringBuilder buf = new StringBuilder("");
-		// ReadPort(buf);
 		command += '\r';
-		// comm.Flush();
 		comm.WriteData(command);
 	}
 
@@ -93,15 +83,7 @@ public class ElmCore {
 	public String GetCommandResult(String command) {
 		StringBuilder buf = new StringBuilder("");
 		SendCommand(command);
-		//Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
-		//timer.SetTimerInterval(gt.getTIMEOUTS());
-		//timer.StartTimer();
 		ReadPort(buf);
-		//timer.StopTimer();
-		//if (timer.isErrorTimeout()) {
-		//	gui.AddError(cmd + " command" + " failed...");
-		//	return "Error Timeout";
-		//}
 		return buf.toString();
 
 	}
@@ -109,23 +91,13 @@ public class ElmCore {
 	public void SendCommandNoRead(String cmd) {
 		StringBuilder buf = new StringBuilder("");
 		SendCommand(cmd); // reset the chip
-		//Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
-		//timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
-		//timer.StartTimer();
 		ReadPort(buf);
-		//timer.StopTimer();
-		//if (timer.isErrorTimeout()) {
-		//	gui.AddError(cmd + " command" + " failed...");
-		//	return;
-		//}
-
 	}
 
 	public Globals.READ_RES ReadPort(StringBuilder response) {
 		boolean escape = false;
 		boolean prompt = false;
 		while (!escape) {
-			//Wait();
 			StringBuilder tmp = new StringBuilder("");
 			comm.ReadData(tmp);
 			String s = tmp.toString();
@@ -140,7 +112,6 @@ public class ElmCore {
 		}
 
 		else {
-			// gui.AddError("PORT_READ_ERROR");
 			return Globals.READ_RES.READ_ERROR;
 		}
 
@@ -164,22 +135,14 @@ public class ElmCore {
 					cmd_sent.length(),
 					msg_received.toString().length() - cmd_sent.length()));
 			SendCommand("ate0"); // turn off echo
-			Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
-			timer.SetTimerInterval(gt.getTIMEOUTS());
-			timer.StartTimer();
 			Globals.READ_RES res = ReadPort(temp_buf);
-			timer.StopTimer();
 			if (res == Globals.READ_RES.PROMPT) {
 				SendCommand("atl0");
-				timer.SetTimerInterval(gt.getTIMEOUTS());
-				timer.StartTimer();
 				res = ReadPort(temp_buf);
-				timer.StopTimer();
 			}
 
 			msg_received = new StringBuilder(msg_received.toString().trim());
 		}
-		// clean up known garbages
 		String str = msg_received.toString();
 		str = str.replace("SEARCHING...", "");
 		str = str.replace("BUS INIT: OK", "");
@@ -287,263 +250,19 @@ public class ElmCore {
 		buf = buf.replace("\t", "");
 		res = (buf.indexOf(filter) == 0);
 		if (res)
-
-			buf = buf
-					.substring(filter.length(), buf.length() - filter.length());
+			buf = buf.substring(filter.length(), buf.length() - filter.length());
 		strbuf = new StringBuilder(buf);
 		return res;
 	}
 
-	private Globals.RESETSTATE Reset_send_reset_request() {
-		SendCommand("atz"); // reset chip
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.ATZ_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
-		vehicle_response = new StringBuilder("");
-		return Globals.RESETSTATE.RESET_GET_REPLY_TO_RESET;
-
-	}
-
-	private Globals.RESETSTATE Reset_get_reply_to_reset() {
-		StringBuilder buf = new StringBuilder("");
-		Globals.RESETSTATE next_state;
-		Globals.READ_RES status;
-
-		timer.StartTimer();
-		status = ReadPort(buf);
-		timer.StopTimer();
-		if (status == Globals.READ_RES.PROMPT) // if '>' detected
-		{
-			vehicle_response = buf;
-			_device = ProcessResponse("atz", vehicle_response);
-			if (_device == Globals.PROC_RES.INTERFACE_ELM323)
-				next_state = Globals.RESETSTATE.RESET_START_ECU_TIMER;
-			else if (_device == Globals.PROC_RES.INTERFACE_ELM327)
-				next_state = Globals.RESETSTATE.RESET_SEND_AT_AT1_REQUEST;
-			else
-				next_state = Globals.RESETSTATE.RESET_CLOSE_DIALOG;
-		} else if (timer.isErrorTimeout()) // if the timer timed out
-		{
-			next_state = Globals.RESETSTATE.RESET_CLOSE_DIALOG; // close dialog
-		} else
-			next_state = Globals.RESETSTATE.RESET_CLOSE_DIALOG;
-		return next_state;
-	}
-
-	private Globals.RESETSTATE Reset_send_at_at1_request() {
-		SendCommand("at@1");
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.AT_TIMEOUT;
-
-		timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
-		vehicle_response = new StringBuilder("");
-		return Globals.RESETSTATE.RESET_GET_AT_AT1_RESPONSE;
-	}
-
-	private Globals.RESETSTATE Reset_get_at_at1_response() {
-		StringBuilder buf = new StringBuilder("");
-		Globals.RESETSTATE next_state;
-		Globals.READ_RES status;
-		Globals.PROC_RES procRes;
-
-		timer.StartTimer();
-		status = ReadPort(buf);
-		timer.StopTimer();
-		if (status == Globals.READ_RES.PROMPT) {
-			vehicle_response = buf;
-			procRes = ProcessResponse("at@1", vehicle_response);
-			if (procRes == Globals.PROC_RES.STN_MFR_STRING)
-				next_state = Globals.RESETSTATE.RESET_START_ECU_TIMER;
-			else if (procRes == Globals.PROC_RES.ELM_MFR_STRING)
-				next_state = Globals.RESETSTATE.RESET_SEND_AT_AT2_REQUEST;
-			else
-				next_state = Globals.RESETSTATE.RESET_HANDLE_CLONE;
-
-		} else if (timer.isErrorTimeout()) {
-			next_state = Globals.RESETSTATE.RESET_CLOSE_DIALOG;
-		} else
-			// serial buffer was empty, but we still got time
-			next_state = Globals.RESETSTATE.RESET_GET_AT_AT1_RESPONSE;
-
-		return next_state;
-
-	}
-
-	private Globals.RESETSTATE Reset_send_at_at2_request() {
-
-		SendCommand("at@2");
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.AT_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS()); // start serial timer
-		vehicle_response = new StringBuilder("");
-
-		return Globals.RESETSTATE.RESET_GET_AT_AT2_RESPONSE;
-
-	}
-
-	private Globals.RESETSTATE Reset_get_at_at2_response() {
-		StringBuilder buf = new StringBuilder("");
-		Globals.RESETSTATE next_state;
-		Globals.READ_RES status;
-		Globals.PROC_RES procRes;
-
-		timer.StartTimer();
-		status = ReadPort(buf);
-		timer.StopTimer();
-		if (status == Globals.READ_RES.PROMPT) // if '>' detected
-		{
-			vehicle_response = buf;
-			procRes = ProcessResponse("at@2", vehicle_response);
-
-			if (procRes == Globals.PROC_RES.STN_MFR_STRING)
-				next_state = Globals.RESETSTATE.RESET_START_ECU_TIMER;
-			else
-				next_state = Globals.RESETSTATE.RESET_HANDLE_CLONE;
-		} else if (timer.isErrorTimeout()) // if the timer timed out
-		{
-			next_state = Globals.RESETSTATE.RESET_CLOSE_DIALOG; // close dialog
-		} else
-			// serial buffer was empty, but we still got time
-			next_state = Globals.RESETSTATE.RESET_GET_AT_AT2_RESPONSE;
-
-		return next_state;
-
-	}
-
-	private Globals.RESETSTATE Reset_start_ecu_timer() {
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.ECU_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS());
-		return Globals.RESETSTATE.RESET_WAIT_FOR_ECU_TIMEOUT;
-	}
-
-	private Globals.RESETSTATE Reset_wait_for_ecu_timeout() {
-		Globals.RESETSTATE next_state;
-		if (timer.isErrorTimeout()) {
-			if (_device == Globals.PROC_RES.INTERFACE_ELM327)
-				next_state = Globals.RESETSTATE.RESET_SEND_DETECT_PROTOCOL_REQUEST;
-			else
-				next_state = Globals.RESETSTATE.RESET_CLOSE_DIALOG;
-		} else
-			next_state = Globals.RESETSTATE.RESET_WAIT_FOR_ECU_TIMEOUT;
-
-		return next_state;
-	}
-
-	private Globals.RESETSTATE Reset_send_detect_protocol_request() {
-		Globals.RESETSTATE next_state;
-		SendCommand("0100");
-
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS());
-		vehicle_response = new StringBuilder("");
-		next_state = Globals.RESETSTATE.RESET_GET_REPLY_TO_DETECT_PROTOCOL;
-
-		return next_state;
-	}
-
-	private Globals.RESETSTATE Reset_get_reply_to_detect_protocol() {
-		StringBuilder buf = new StringBuilder("");
-		Globals.RESETSTATE next_state;
-		Globals.READ_RES status;
-		Globals.PROC_RES procRes;
-
-		timer.StartTimer();
-		status = ReadPort(buf);
-		timer.StopTimer();
-		if (status == Globals.READ_RES.PROMPT) {
-			vehicle_response = buf;
-			procRes = ProcessResponse("0100", vehicle_response);
-
-			if (procRes == Globals.PROC_RES.ERR_NO_DATA
-					|| procRes == Globals.PROC_RES.UNABLE_TO_CONNECT)
-				resetError = "Protocol could not be detected. ";
-			else if (procRes != Globals.PROC_RES.HEX_DATA)
-				resetError = "Communication error";
-			next_state = Globals.RESETSTATE.RESET_CLOSE_DIALOG;
-		} else if (timer.isErrorTimeout()) {
-			resetError = "Interface not found";
-			next_state = Globals.RESETSTATE.RESET_CLOSE_DIALOG;
-		} else
-			next_state = Globals.RESETSTATE.RESET_GET_REPLY_TO_DETECT_PROTOCOL;
-
-		return next_state;
-
-	}
-
-	private Globals.RESETSTATE Reset_handle_clone() {
-		return Globals.RESETSTATE.RESET_CLOSE_DIALOG;
-	}
-
-	public void Reset_Proc() {
-		if (state == Globals.RESETSTATE.RESET_CLOSE_DIALOG)
-			return;
-		switch (state) {
-		case RESET_SEND_RESET_REQUEST:
-			state = Reset_send_reset_request();
-			Reset_Proc();
-			break;
-		case RESET_GET_REPLY_TO_RESET:
-			state = Reset_get_reply_to_reset();
-			Reset_Proc();
-			break;
-		case RESET_SEND_AT_AT1_REQUEST:
-			state = Reset_send_at_at1_request();
-			Reset_Proc();
-			break;
-		case RESET_GET_AT_AT1_RESPONSE:
-			state = Reset_get_at_at1_response();
-			Reset_Proc();
-			break;
-		case RESET_SEND_AT_AT2_REQUEST:
-			state = Reset_send_at_at2_request();
-			Reset_Proc();
-			break;
-		case RESET_GET_AT_AT2_RESPONSE:
-			state = Reset_get_at_at2_response();
-			Reset_Proc();
-			break;
-		case RESET_START_ECU_TIMER:
-			state = Reset_start_ecu_timer();
-			Reset_Proc();
-			break;
-		case RESET_WAIT_FOR_ECU_TIMEOUT:
-			state = Reset_wait_for_ecu_timeout();
-			Reset_Proc();
-			break;
-		case RESET_SEND_DETECT_PROTOCOL_REQUEST:
-			state = Reset_send_detect_protocol_request();
-			Reset_Proc();
-			break;
-		case RESET_GET_REPLY_TO_DETECT_PROTOCOL:
-			state = Reset_get_reply_to_detect_protocol();
-			Reset_Proc();
-			break;
-		case RESET_HANDLE_CLONE:
-			state = Reset_handle_clone();
-			Reset_Proc();
-			break;
-		case RESET_CLOSE_DIALOG:
-			break;
-
-		}
-	}
-
-	public void Reset() {
-		state = Globals.RESETSTATE.RESET_SEND_RESET_REQUEST;
-		Reset_Proc();
-	}
-
 	public String GetPidResponse(String pid, int pidBytes) {
 		StringBuilder buf = new StringBuilder("");
-		// Globals.READ_RES response_status;
 		Globals.PROC_RES resState;
 		cmd = "01" + pid;
 		vehicle_response = new StringBuilder("");
 		SendCommand(cmd);
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
+		ReadPort(vehicle_response);
 
-		timer.SetTimerInterval(gt.getTIMEOUTS());
-		timer.StartTimer();
-		/* response_status = */ReadPort(vehicle_response);
-		timer.StopTimer();
-		String vr = vehicle_response.toString();
 		if (timer.isErrorTimeout()) {
 
 			return "ERROR TIMEOUT";
@@ -551,7 +270,6 @@ public class ElmCore {
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "41" + pid;
-			String s = buf.toString();
 			String v = vehicle_response.toString();
 			if (IsValidResponse(buf, v, cmd)) {
 				if (buf.toString().length() > pidBytes * 2)
@@ -568,26 +286,15 @@ public class ElmCore {
 
 			return "ERROR " + BadResponseToString(resState);
 		}
-
 	}
 
 	public int GetNumOfDTC(boolean noError, boolean milIsOn) {
 		StringBuilder buf = new StringBuilder("");
-		// Globals.READ_RES response_status;
 		Globals.PROC_RES resState;
 		cmd = "0101";
 		vehicle_response = new StringBuilder("");
 		SendCommand(cmd);
-
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS());
-		timer.StartTimer();
-		/* response_status = */ReadPort(vehicle_response);
-		timer.StopTimer();
-		if (timer.isErrorTimeout()) {
-			noError = false;
-			return 0;
-		}
+		ReadPort(vehicle_response);
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "4101";
@@ -653,20 +360,11 @@ public class ElmCore {
 	public void ResetDtc(boolean noError) {
 		noError = false;
 		StringBuilder buf = new StringBuilder("");
-		// Globals.READ_RES response_status;
 		Globals.PROC_RES resState;
 		cmd = "04";
 		vehicle_response = new StringBuilder("");
 		SendCommand(cmd);
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
-		timer.SetTimerInterval(gt.getTIMEOUTS());
-		timer.StartTimer();
-		/* response_status = */ReadPort(vehicle_response);
-		timer.StopTimer();
-		if (timer.isErrorTimeout()) {
-			noError = false;
-			return;
-		}
+		ReadPort(vehicle_response);
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "44";
@@ -681,21 +379,11 @@ public class ElmCore {
 	public ArrayList<String> getDtcList(boolean noError) {
 		ArrayList<String> list = new ArrayList<String>();
 		StringBuilder buf = new StringBuilder("");
-		// Globals.READ_RES response_status;
 		Globals.PROC_RES resState;
 		cmd = "03";
 		vehicle_response = new StringBuilder("");
 		SendCommand(cmd);
-		Globals.TIMEOUTS gt = Globals.TIMEOUTS.OBD_REQUEST_TIMEOUT;
-
-		timer.SetTimerInterval(gt.getTIMEOUTS());
-		timer.StartTimer();
-		/* response_status = */ReadPort(vehicle_response);
-		timer.StopTimer();
-		if (timer.isErrorTimeout()) {
-			noError = false;
-			return null;
-		}
+		ReadPort(vehicle_response);
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "43";
