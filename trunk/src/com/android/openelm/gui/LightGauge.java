@@ -89,16 +89,16 @@ public class LightGauge extends View {
 	private float currentValue = 0;
 	
 	private int rangeOkColor = 0x9f00ff00;
-	private int rangeOkMinValue = 0;
-	private int rangeOkMaxValue = 0;
+	private float rangeOkMinValue = 0;
+	private float rangeOkMaxValue = 0;
 	
 	private int rangeWarningColor = 0x9fff8800;
-	private int rangeWarningMinValue = 0;
-	private int rangeWarningMaxValue = 0;
+	private float rangeWarningMinValue = 0;
+	private float rangeWarningMaxValue = 0;
 
 	private int rangeErrorColor = 0x9fff0000;
-	private int rangeErrorMinValue = 0;
-	private int rangeErrorMaxValue = 0;
+	private float rangeErrorMinValue = 0;
+	private float rangeErrorMaxValue = 0;
 	
 	private RectF valueRect;
 	private RectF rangeRect;
@@ -168,15 +168,15 @@ public class LightGauge extends View {
 		showGauge = show;
 	}
 	
-	public void setRangeOkValues(int min, int max){
+	public void setRangeOkValues(float min, float max){
 		rangeOkMinValue = min;
 		rangeOkMaxValue = max;
 	}
-	public void setRangeWarningValues(int min, int max){
+	public void setRangeWarningValues(float min, float max){
 		rangeWarningMinValue = min;
 		rangeWarningMaxValue = max;
 	}
-	public void setRangeErrorValues(int min, int max){
+	public void setRangeErrorValues(float min, float max){
 		rangeErrorMinValue = min;
 		rangeErrorMaxValue = max;
 	}
@@ -537,7 +537,7 @@ public class LightGauge extends View {
 		}
 	}
 	
-	private void regenerateBackground() {
+	public void regenerateBackground() {
 		if (background != null) {
 			background.recycle();
 		}

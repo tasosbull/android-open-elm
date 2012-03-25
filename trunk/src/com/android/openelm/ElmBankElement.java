@@ -46,6 +46,15 @@ public class ElmBankElement implements Comparable<ElmBankElement> {
 	private String formula;
 	private double peakvalue;
 	private GaugeSchema gauge;
+	private double valuefactor;
+
+	public double getValuefactor() {
+		return valuefactor;
+	}
+
+	public void setValuefactor(double valuefactor) {
+		this.valuefactor = valuefactor;
+	}
 
 	public boolean isActive() {
 		return active;
@@ -182,7 +191,10 @@ public class ElmBankElement implements Comparable<ElmBankElement> {
 		if (another == null)
 			return 1;
 		Integer _id = another.id;
-		return _id.compareTo(this.getId());
+		if(this.getId() < _id) return -1;
+		else if (this.getId() == _id) return 0;
+		else return 1;
+		//return _id.compareTo(this.getId());
 	}
 
 	@Override
@@ -202,6 +214,7 @@ public class ElmBankElement implements Comparable<ElmBankElement> {
 		stringBuffer.append("\nmaxval: " + Double.toString(maxval));
 		stringBuffer.append("\nformula: " + formula);
 		stringBuffer.append("\npeakvalue: " + Double.toString(peakvalue));
+		stringBuffer.append("\nvaluefactor: " + Double.toString(valuefactor));
 		if (gauge != null) {
 			stringBuffer.append("\ngauge analog: "
 					+ Boolean.toString(gauge.isAnalog()));

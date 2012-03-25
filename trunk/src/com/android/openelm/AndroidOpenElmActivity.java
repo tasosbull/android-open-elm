@@ -31,6 +31,7 @@ package com.android.openelm;
 
 import java.util.List;
 
+import com.android.openelm.gui.LightGauge;
 import com.android.openelm.interfaces.IGui;
 
 import android.app.Activity;
@@ -40,8 +41,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,8 +57,11 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class AndroidOpenElmActivity extends Activity implements IGui,
 		OnClickListener {
@@ -75,11 +84,42 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	List<String> devices = null;
 	boolean connected = false;
 	boolean initialized = false;
+	ElmBankElement[] currentElements;
+	int buttonSelectedColor = Color.GREEN;
+	
+	
+	int wOffset = 60; //todo application param
+	int hOffset = 60;
+
+	LightGauge gauge = null;
+	ElmBankElement gaugeElement = null;
+	double gaugeValueFactor = 1;
+	Button sensor1 = null;
+	Button sensor2 = null;
+	Button sensor3 = null;
+	Button sensor4 = null;
+	Button bankPrev = null;
+	Button bankNext = null;
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		InitSensorUI();
+		InitMaestro();
+		/*
 		setContentView(R.layout.main);
+		elm = (TextView) findViewById(R.id.elm);
+		edittext = (EditText) findViewById(R.id.edittext);
+		button = (Button) findViewById(R.id.button);
+		button_write = (Button) findViewById(R.id.button_write);
+		button_read = (Button) findViewById(R.id.button_read);
+		button.setOnClickListener(this);
+		button_read.setOnClickListener(this);
+		button_write.setOnClickListener(this);
+		InitMaestro();
+		*/
 		// getPrefs();
 		/*
 		 * setContentView(R.layout.main); TextView testXmlContent =
@@ -98,37 +138,107 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		 * (IOException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); }
 		 */
-		elm = (TextView) findViewById(R.id.elm);
-		edittext = (EditText) findViewById(R.id.edittext);
-		button = (Button) findViewById(R.id.button);
-		button_write = (Button) findViewById(R.id.button_write);
-		button_read = (Button) findViewById(R.id.button_read);
-		button.setOnClickListener(this);
-		button_read.setOnClickListener(this);
-		button_write.setOnClickListener(this);
-		InitMaestro();
 
 	}
-
-	public void onClick(View v) {
-		if (v == button) {
-			if(!connected)
-				return;
-			String command = edittext.getText().toString();
-			String result = maestro.GetCommandResult(command);
-			elm.setText(result);
+	
+	private void InitSensorUI(){
 		
-			
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		setContentView(R.layout.main);
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		setContentView(R.layout.main);
+		RelativeLayout rl = (RelativeLayout) findViewById(R.id.relative);
+		int h = metrics.heightPixels - hOffset ;
+		int w = metrics.widthPixels - wOffset;
+
+		RelativeLayout.LayoutParams params;
+        int buttonHeight = (h-w) / 2 ;
+		gauge = new LightGauge(this);
+		params = new RelativeLayout.LayoutParams(w, w);
+		params.leftMargin = wOffset / 2;
+		params.topMargin = 0;
+		rl.addView(gauge, params);
+
+		sensor1  = new Button(this);
+		sensor1.setOnClickListener(this);
+//		sensor1.setText(new StringBuffer("test aaa bbb ccc"));
+		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
+		params.leftMargin = wOffset / 2;
+		params.topMargin =  h - (buttonHeight * 2);
+		rl.addView(sensor1, params);
+
+		sensor2  = new Button(this);
+		sensor2.setOnClickListener(this);
+		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
+		params.leftMargin = (w / 4) + (wOffset / 2);
+		params.topMargin =  h - (buttonHeight * 2);
+		rl.addView(sensor2, params);
+
+		sensor3  = new Button(this);
+		sensor3.setOnClickListener(this);
+		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
+		params.leftMargin = ((w / 4) * 2) + (wOffset / 2);
+		params.topMargin =  h - (buttonHeight * 2);
+		rl.addView(sensor3, params);
+
+		sensor4  = new Button(this);
+		sensor4.setOnClickListener(this);
+		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
+		params.leftMargin = ((w / 4) * 3) +  (wOffset / 2);
+		params.topMargin =  h - (buttonHeight * 2);
+		rl.addView(sensor4, params);
+
+		bankPrev  = new Button(this);
+		bankPrev.setOnClickListener(this);
+		bankPrev.setText("Bank prev");
+		params = new RelativeLayout.LayoutParams(w / 2, buttonHeight);
+		params.leftMargin =  (wOffset / 2);
+		params.topMargin =  h - buttonHeight;
+		rl.addView(bankPrev, params);
+		
+		bankNext  = new Button(this);
+		bankNext.setOnClickListener(this);
+		bankNext.setText("Bank next");
+		params = new RelativeLayout.LayoutParams(w / 2, buttonHeight);
+		params.leftMargin = (w / 2) + (wOffset / 2);
+		params.topMargin =  h - buttonHeight;
+		rl.addView(bankNext, params);
+		
+		text  = new TextView(this);
+		text.setText("****Android Open Elm****");
+		params = new RelativeLayout.LayoutParams(w, (hOffset / 2) );
+		params.leftMargin =  wOffset / 2;
+		params.topMargin =  h  ;
+		rl.addView(text, params);
+	}
+	
+	public void onClick(View v) {
+		if(v == sensor1){
+			SetSelectedElement(0);
 		}
+		else if(v == sensor2){
+			SetSelectedElement(1);
+		}
+		else if(v == sensor3){
+			SetSelectedElement(2);
+		}
+		else if(v == sensor4){
+			SetSelectedElement(3);
+		}
+		else if(v == bankPrev){
+			maestro.NextBank(false);	
+		}
+		else if(v == bankNext){
+			maestro.NextBank(true);
+		}
+		
+	
 		else if(v == button_read){
 			if(!connected)
 				return;
 			StringBuilder b = new StringBuilder();
-			//Globals.TIMEOUTS gt = Globals.TIMEOUTS.MAX_TIMEOUT;
-			//maestro.core.timer.SetTimerInterval(gt.getTIMEOUTS());
-			//maestro.core.timer.StartTimer();
 			maestro.core.ReadPort(b);
-			//maestro.core.timer.StopTimer();
 			elm.setText(b.toString());
 			
 		}
@@ -221,7 +331,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		case R.id.elm_selectdevice:
 			return true;
 		case R.id.elm_connect:
-			if(!connected)
 				connected = maestro.Connect(deviceSelected);
 			return true;
 		default:
@@ -230,7 +339,25 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	public void SetPidValue(int bankPosition, ElmBankElement elem, double value) {
-		elm.setText(elem.getShortDescription() + "  " + Double.toString(value));
+		//elm.setText(elem.getShortDescription() + "  " + Double.toString(value));
+		if(elem == gaugeElement)
+			gauge.setValue((float)(value * gaugeValueFactor));
+		for(int i = 0; i < 4; ++i){
+			Button button = null;
+			switch(i){
+				case 0: button = sensor1; break;
+				case 1: button = sensor2; break;
+				case 2: button = sensor3; break;
+				case 3: button = sensor4; break;
+			}
+			if(currentElements[i] != null){
+				button.setText(elem.getShortDescription() + " " + Double.toString(value));
+			}
+			else{
+				button.setText("");
+			}
+			
+		}
 	}
 
 	private void elmPreferences() {
@@ -244,10 +371,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	public void ProcMessages() {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < 10; ++i)
-			;
-
 	}
 
 	public int GetPortSelected() {
@@ -304,6 +427,91 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	public String GetSelectedDevice() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void ClearSensorText(){
+		sensor1.setText("");
+		sensor2.setText("");
+		sensor3.setText("");
+		sensor4.setText("");
+	}
+	
+	private void CreateGauge(int idx){
+		//gauge = new LightGauge(this);
+		ElmBankElement elem = currentElements[idx];
+		GaugeSchema gs = elem.getGauge();
+		gaugeValueFactor = elem.getValuefactor();
+		int totalNotches = gs.getTotalNotches();
+		int incrementPerLargeNotch = gs.getIncrementLarge();
+		int incrementPerSmallNotch = gs.getIncrementSmall();
+		int notcheDisplayFactor = gs.getFactor();
+		gauge.setNotches(totalNotches, incrementPerLargeNotch, incrementPerSmallNotch, notcheDisplayFactor);
+		int scaleMinValue = (int)(gs.getScaleMin() ) ;
+		int scaleCenterValue = (int)(gs.getScaleCenter()) ;
+		int scaleMaxValue = (int)(gs.getScaleMax() ) ;
+		gauge.setScale(scaleMinValue, scaleCenterValue, scaleMaxValue);
+		int r = gs.getFaceRed();
+		int g = gs.getFaceGreen();
+		int b = gs.getFaceBlue();
+		gauge.setFaceColor(r, g, b);
+		r = gs.getScaleRed();
+		g = gs.getScaleGreen();
+		b = gs.getScaleBlue();
+		gauge.setScaleColor(r, g, b);
+		r = gs.getHandRed();
+		g = gs.getHandGreen();
+		b = gs.getHandBlue();
+		gauge.setHandColor(r, g, b);
+		float min = (float)(elem.getMinval() * gaugeValueFactor);
+		float warn = (float)(elem.getWarning() * gaugeValueFactor);
+		float err = (float)(elem.getError() * gaugeValueFactor);
+		float max = (float)(elem.getMaxval() * gaugeValueFactor);
+		gauge.setRangeOkValues(min, warn);
+		gauge.setRangeWarningValues(warn, err);
+		gauge.setRangeErrorValues(err, max);
+		gauge.setShowRange(true);
+        gauge.setShowGauge(true);
+        String lowerTitle = gs.getTitleLower();
+        String upperTitle = gs.getTitleUpper();
+        String unitTitle = gs.getTitleUnit();
+        gauge.setTitles(lowerTitle, upperTitle, unitTitle);
+        r = gs.getTitlesRed();
+        g = gs.getTitlesGreen();
+        b = gs.getTitlesBlue();
+        gauge.setTitlesColor(r, g, b);
+        gauge.init();
+        gauge.regenerateBackground();
+        gauge.invalidate();
+        gauge.setValue((float)elem.getMinval());
+        
+	}
+	
+	private void SetSelectedElement(int idx){
+		if(currentElements[idx] == null)
+			return;
+		sensor1.setClickable(true);
+		sensor2.setClickable(true);
+		sensor3.setClickable(true);
+		sensor4.setClickable(true);
+		Button button = null;
+		switch(idx){
+			case 0: button = sensor1; break;
+			case 1: button = sensor2; break;
+			case 2: button = sensor3; break;
+			case 3: button = sensor4; break;
+		}
+		button.setClickable(false);
+		CreateGauge(idx);
+		gaugeElement = currentElements[idx];
+	}
+	
+	public void GetCurrentElements(ElmBankElement[] _currentElements){
+		currentElements = _currentElements;
+		ClearSensorText();
+		if(currentElements[0] != null){
+			SetSelectedElement(0);
+		}
+			
 	}
 
 }

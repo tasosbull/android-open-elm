@@ -39,5 +39,6 @@ public interface IGui {
     public int GetBankLayoutElementsSelected();
     public void SetPidValue(int bankPosition, ElmBankElement elem, double value);
     public String GetSelectedDevice();
+    public void GetCurrentElements(ElmBankElement[] _currentElements);
 
 }

@@ -1,11 +1,3 @@
-package com.android.openelm;
-
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-
 //*********************************************************************************
 //***** BEGIN GPL LICENSE BLOCK *****
 //
@@ -34,6 +26,16 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 //
 //Short description of this file
 //************************************************************************************
+
+
+package com.android.openelm;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+
 
 public class ExpressionEvaluator {
 	private static final String DATABASE_NAME = "ELM";

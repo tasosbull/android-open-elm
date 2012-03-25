@@ -95,12 +95,21 @@ public class ConcreteCommPort implements ICommPort {
 		return false;
 	}
 
-	
 	public void SetPort(int aCommPort) {
 		port = aCommPort;
 	}
 
 	public boolean Connect(String deviceName) {
+		if (socket != null) {
+			try {
+				socket.close();
+				socket.connect();
+				return true;
+			} catch (IOException ex) {
+				SetError("IOException " + ex.getMessage());
+				return false;
+			}
+		}
 		bluetoothAdapter.cancelDiscovery();
 		if (deviceName == null) {
 			SetError("You must select a bluetooth device");
@@ -152,7 +161,7 @@ public class ConcreteCommPort implements ICommPort {
 
 		mmInStream = socket.getInputStream();
 		return mmInStream.available();
-		
+
 	}
 
 	public void Flush() {
@@ -169,24 +178,24 @@ public class ConcreteCommPort implements ICommPort {
 
 		return 0;
 	}
-	
+
 	public int ReadData(StringBuilder data) {
 		int bytes;
 		int total = 0;
 		InputStream mmInStream = null;
 		try {
 			mmInStream = socket.getInputStream();
-			byte[] buffer ;
+			byte[] buffer;
 			total = 0;
-			//int i;
-			//while ((i = HasData()) > 0) {
-			
-				buffer = new byte[1];
-				bytes = mmInStream.read(buffer);
-				String s = new String(buffer);
-				data.append(s);
-				total += bytes;
-		//}	
+			// int i;
+			// while ((i = HasData()) > 0) {
+
+			buffer = new byte[1];
+			bytes = mmInStream.read(buffer);
+			String s = new String(buffer);
+			data.append(s);
+			total += bytes;
+			// }
 
 		} catch (IOException e) {
 			SetError(e.getMessage());

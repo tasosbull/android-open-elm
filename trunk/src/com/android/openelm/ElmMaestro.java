@@ -50,8 +50,11 @@ public class ElmMaestro {
 	private int _port = 1;
 	private int _elmProto = 0;
 	private int _bankLayout = 4;
+	private int _banks = 0;
+	private int _currentBank;
 	private Activity _activity;
 	private List<ElmBankElement> _elements;
+	private ElmBankElement[] _currentElements = null;
 	private int _currentBankElement = -1;
 	private long _timerRefresh = 5;
 	private Timer _localTimer;
@@ -72,6 +75,7 @@ public class ElmMaestro {
 			throw new Exception("You must set activity first");
 		eval = new ExpressionEvaluator(_activity);
 		LoadXmlElements();
+		InitBanks();
 		if(!CreatePort())
 			return false;
 		CreateTimer();
@@ -180,6 +184,42 @@ public class ElmMaestro {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void InitBanks(){
+		_banks = _elements.size() / _bankLayout;
+		if((_elements.size() % _bankLayout) > 0)
+			++_banks;
+		if(_banks > 0)
+			_currentBank = 1;
+		SetCurrentElements(_currentBank);
+	}
+	
+	private void SetCurrentElements(int bank){
+		_currentElements = new ElmBankElement[4] ;
+		int startElement = 1;
+		if(bank > 1)
+			startElement = (bank * _bankLayout) + 1;
+		if(startElement <= _elements.size()){
+			for (int i = 0; i < 4; ++i ){
+				if((startElement + i) > _elements.size())
+					break;
+				_currentElements[i] = _elements.get((startElement - 1) + i);
+			}
+		}
+		gui.GetCurrentElements(_currentElements);
+		
+	}
+	
+	public void NextBank(boolean forward){
+		if(forward){
+				_currentBank = (_currentBank < _banks) ? _currentBank + 1 : 1;
+		}
+		else{
+			_currentBank = (_currentBank <= 1) ? _banks : _currentBank - 1;
+		}
+		SetCurrentElements(_currentBank);
+		
 	}
 
 	private boolean CreatePort() {
