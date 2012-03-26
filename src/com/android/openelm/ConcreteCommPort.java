@@ -103,8 +103,6 @@ public class ConcreteCommPort implements ICommPort {
 		if (socket != null) {
 			try {
 				socket.close();
-				socket.connect();
-				return true;
 			} catch (IOException ex) {
 				SetError("IOException " + ex.getMessage());
 				return false;

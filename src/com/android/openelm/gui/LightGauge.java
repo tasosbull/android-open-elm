@@ -538,6 +538,8 @@ public class LightGauge extends View {
 	}
 	
 	public void regenerateBackground() {
+		if((getWidth() <= 0) || (getHeight() <= 0))
+			return;
 		if (background != null) {
 			background.recycle();
 		}
