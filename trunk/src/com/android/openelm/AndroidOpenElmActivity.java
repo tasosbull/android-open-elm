@@ -43,25 +43,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 public class AndroidOpenElmActivity extends Activity implements IGui,
 		OnClickListener {
@@ -88,8 +81,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	int buttonSelectedColor = Color.GREEN;
 	
 	
-	int wOffset = 60; //todo application param
-	int hOffset = 60;
+	int wOffset = 100; //todo application param
+	int hOffset = 100;
 
 	LightGauge gauge = null;
 	ElmBankElement gaugeElement = null;

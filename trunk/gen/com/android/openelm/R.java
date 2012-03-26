@@ -24,22 +24,16 @@ public final class R {
         public static final int plastic=0x7f020003;
     }
     public static final class id {
-        public static final int button=0x7f080001;
-        public static final int button_read=0x7f080003;
-        public static final int button_write=0x7f080002;
-        public static final int edittext=0x7f080000;
-        public static final int elm=0x7f080004;
-        public static final int elm_connect=0x7f080008;
-        public static final int elm_exit=0x7f08000b;
-        public static final int elm_preferences=0x7f080006;
-        public static final int elm_selectdevice=0x7f080007;
-        public static final int elm_start=0x7f080009;
-        public static final int elm_stop=0x7f08000a;
-        public static final int relative=0x7f080005;
+        public static final int elm_connect=0x7f080003;
+        public static final int elm_exit=0x7f080006;
+        public static final int elm_preferences=0x7f080001;
+        public static final int elm_selectdevice=0x7f080002;
+        public static final int elm_start=0x7f080004;
+        public static final int elm_stop=0x7f080005;
+        public static final int relative=0x7f080000;
     }
     public static final class layout {
-        public static final int debug=0x7f030000;
-        public static final int main=0x7f030001;
+        public static final int main=0x7f030000;
     }
     public static final class menu {
         public static final int main_menu=0x7f070000;
