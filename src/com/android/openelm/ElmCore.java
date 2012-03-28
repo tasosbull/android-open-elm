@@ -263,10 +263,6 @@ public class ElmCore {
 		SendCommand(cmd);
 		ReadPort(vehicle_response);
 
-		if (timer.isErrorTimeout()) {
-
-			return "ERROR TIMEOUT";
-		}
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "41" + pid;
