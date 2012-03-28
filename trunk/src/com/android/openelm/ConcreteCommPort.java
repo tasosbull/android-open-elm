@@ -100,14 +100,14 @@ public class ConcreteCommPort implements ICommPort {
 	}
 
 	public boolean Connect(String deviceName) {
-		if (socket != null) {
-			try {
-				socket.close();
-			} catch (IOException ex) {
-				SetError("IOException " + ex.getMessage());
-				return false;
-			}
-		}
+//		if (socket != null) {
+//			try {
+//				socket.close();
+//			} catch (IOException ex) {
+//				SetError("IOException " + ex.getMessage());
+//				return false;
+//			}
+//		}
 		bluetoothAdapter.cancelDiscovery();
 		if (deviceName == null) {
 			SetError("You must select a bluetooth device");

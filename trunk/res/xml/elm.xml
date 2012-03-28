@@ -11,7 +11,7 @@
   		<description_text>engine rpm * 1000</description_text>
 		<value_factor>0.001</value_factor>
   		<minval>0</minval>
-  		<maxval>8000</maxval>
+  		<maxval>10000</maxval>
   		<warning>4500</warning>
   		<error>6000</error>
   		<formula>(({1}*256)+{2})/4</formula>

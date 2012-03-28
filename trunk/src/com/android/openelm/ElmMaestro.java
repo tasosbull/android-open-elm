@@ -207,6 +207,10 @@ public class ElmMaestro {
 				_currentElements[i] = _elements.get((startElement - 1) + i);
 			}
 		}
+		else{
+			InitBanks();
+			return;
+		}
 		gui.GetCurrentElements(_currentElements);
 		
 	}

@@ -79,6 +79,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	boolean initialized = false;
 	ElmBankElement[] currentElements;
 	int buttonSelectedColor = Color.GREEN;
+	int sensorTextSize = 12;
 	
 	
 	int wOffset = 100; //todo application param
@@ -155,7 +156,9 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 
 		sensor1  = new Button(this);
 		sensor1.setOnClickListener(this);
-//		sensor1.setText(new StringBuffer("test aaa bbb ccc"));
+		sensor1.setTextSize(sensorTextSize);
+		sensor1.setText(new StringBuffer("test 12"));
+		sensor1.setBackgroundColor(Color.WHITE);
 		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
 		params.leftMargin = wOffset / 2;
 		params.topMargin =  h - (buttonHeight * 2);
@@ -163,6 +166,9 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 
 		sensor2  = new Button(this);
 		sensor2.setOnClickListener(this);
+		sensor2.setTextSize(sensorTextSize);
+		sensor2.setText(new StringBuffer("test 12"));
+		sensor2.setBackgroundColor(Color.WHITE);
 		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
 		params.leftMargin = (w / 4) + (wOffset / 2);
 		params.topMargin =  h - (buttonHeight * 2);
@@ -170,6 +176,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 
 		sensor3  = new Button(this);
 		sensor3.setOnClickListener(this);
+		sensor3.setTextSize(sensorTextSize);
+		sensor3.setBackgroundColor(Color.WHITE);
 		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
 		params.leftMargin = ((w / 4) * 2) + (wOffset / 2);
 		params.topMargin =  h - (buttonHeight * 2);
@@ -177,6 +185,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 
 		sensor4  = new Button(this);
 		sensor4.setOnClickListener(this);
+		sensor4.setTextSize(sensorTextSize);
+		sensor4.setBackgroundColor(Color.WHITE);
 		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
 		params.leftMargin = ((w / 4) * 3) +  (wOffset / 2);
 		params.topMargin =  h - (buttonHeight * 2);
@@ -423,6 +433,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 	
 	public void ClearSensorText(){
+		if(true)
+			return;
 		sensor1.setText("");
 		sensor2.setText("");
 		sensor3.setText("");
@@ -486,6 +498,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensor2.setClickable(true);
 		sensor3.setClickable(true);
 		sensor4.setClickable(true);
+		sensor1.setBackgroundColor(Color.WHITE);
+		sensor2.setBackgroundColor(Color.WHITE);
+		sensor3.setBackgroundColor(Color.WHITE);
+		sensor4.setBackgroundColor(Color.WHITE);
 		Button button = null;
 		switch(idx){
 			case 0: button = sensor1; break;
@@ -494,6 +510,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			case 3: button = sensor4; break;
 		}
 		button.setClickable(false);
+		button.setBackgroundColor(Color.LTGRAY);
 		CreateGauge(idx);
 		gaugeElement = currentElements[idx];
 	}
