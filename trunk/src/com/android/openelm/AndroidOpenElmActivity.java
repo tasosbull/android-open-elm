@@ -44,7 +44,10 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.Contacts.Intents.UI;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -80,9 +83,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	ElmBankElement[] currentElements;
 	int buttonSelectedColor = Color.GREEN;
 	int sensorTextSize = 12;
-	
-	
-	int wOffset = 100; //todo application param
+
+	int wOffset = 100; // todo application param
 	int hOffset = 100;
 
 	LightGauge gauge = null;
@@ -94,26 +96,25 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	Button sensor4 = null;
 	Button bankPrev = null;
 	Button bankNext = null;
-	
-	
+	RelativeLayout rl = null;
+	int iDbg = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		InitSensorUI();
 		InitMaestro();
+		updateUI();
 		/*
-		setContentView(R.layout.main);
-		elm = (TextView) findViewById(R.id.elm);
-		edittext = (EditText) findViewById(R.id.edittext);
-		button = (Button) findViewById(R.id.button);
-		button_write = (Button) findViewById(R.id.button_write);
-		button_read = (Button) findViewById(R.id.button_read);
-		button.setOnClickListener(this);
-		button_read.setOnClickListener(this);
-		button_write.setOnClickListener(this);
-		InitMaestro();
-		*/
+		 * setContentView(R.layout.main); elm = (TextView)
+		 * findViewById(R.id.elm); edittext = (EditText)
+		 * findViewById(R.id.edittext); button = (Button)
+		 * findViewById(R.id.button); button_write = (Button)
+		 * findViewById(R.id.button_write); button_read = (Button)
+		 * findViewById(R.id.button_read); button.setOnClickListener(this);
+		 * button_read.setOnClickListener(this);
+		 * button_write.setOnClickListener(this); InitMaestro();
+		 */
 		// getPrefs();
 		/*
 		 * setContentView(R.layout.main); TextView testXmlContent =
@@ -134,119 +135,113 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		 */
 
 	}
-	
-	private void InitSensorUI(){
-		
+
+	private void InitSensorUI() {
+
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.main);
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		setContentView(R.layout.main);
-		RelativeLayout rl = (RelativeLayout) findViewById(R.id.relative);
-		int h = metrics.heightPixels - hOffset ;
+		rl = (RelativeLayout) findViewById(R.id.relative);
+		int h = metrics.heightPixels - hOffset;
 		int w = metrics.widthPixels - wOffset;
 
 		RelativeLayout.LayoutParams params;
-        int buttonHeight = (h-w) / 2 ;
+		int buttonHeight = (h - w) / 2;
 		gauge = new LightGauge(this);
 		params = new RelativeLayout.LayoutParams(w, w);
 		params.leftMargin = wOffset / 2;
 		params.topMargin = 0;
 		rl.addView(gauge, params);
 
-		sensor1  = new Button(this);
+		sensor1 = new Button(this);
 		sensor1.setOnClickListener(this);
 		sensor1.setTextSize(sensorTextSize);
 		sensor1.setText(new StringBuffer("test 12"));
 		sensor1.setBackgroundColor(Color.WHITE);
-		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
+		params = new RelativeLayout.LayoutParams(w / 4, buttonHeight);
 		params.leftMargin = wOffset / 2;
-		params.topMargin =  h - (buttonHeight * 2);
+		params.topMargin = h - (buttonHeight * 2);
 		rl.addView(sensor1, params);
 
-		sensor2  = new Button(this);
+		sensor2 = new Button(this);
 		sensor2.setOnClickListener(this);
 		sensor2.setTextSize(sensorTextSize);
 		sensor2.setText(new StringBuffer("test 12"));
 		sensor2.setBackgroundColor(Color.WHITE);
-		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
+		params = new RelativeLayout.LayoutParams(w / 4, buttonHeight);
 		params.leftMargin = (w / 4) + (wOffset / 2);
-		params.topMargin =  h - (buttonHeight * 2);
+		params.topMargin = h - (buttonHeight * 2);
 		rl.addView(sensor2, params);
 
-		sensor3  = new Button(this);
+		sensor3 = new Button(this);
 		sensor3.setOnClickListener(this);
 		sensor3.setTextSize(sensorTextSize);
 		sensor3.setBackgroundColor(Color.WHITE);
-		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
+		params = new RelativeLayout.LayoutParams(w / 4, buttonHeight);
 		params.leftMargin = ((w / 4) * 2) + (wOffset / 2);
-		params.topMargin =  h - (buttonHeight * 2);
+		params.topMargin = h - (buttonHeight * 2);
 		rl.addView(sensor3, params);
 
-		sensor4  = new Button(this);
+		sensor4 = new Button(this);
 		sensor4.setOnClickListener(this);
 		sensor4.setTextSize(sensorTextSize);
 		sensor4.setBackgroundColor(Color.WHITE);
-		params = new RelativeLayout.LayoutParams(w / 4 , buttonHeight);
-		params.leftMargin = ((w / 4) * 3) +  (wOffset / 2);
-		params.topMargin =  h - (buttonHeight * 2);
+		params = new RelativeLayout.LayoutParams(w / 4, buttonHeight);
+		params.leftMargin = ((w / 4) * 3) + (wOffset / 2);
+		params.topMargin = h - (buttonHeight * 2);
 		rl.addView(sensor4, params);
 
-		bankPrev  = new Button(this);
+		bankPrev = new Button(this);
 		bankPrev.setOnClickListener(this);
 		bankPrev.setText("Bank prev");
 		params = new RelativeLayout.LayoutParams(w / 2, buttonHeight);
-		params.leftMargin =  (wOffset / 2);
-		params.topMargin =  h - buttonHeight;
+		params.leftMargin = (wOffset / 2);
+		params.topMargin = h - buttonHeight;
 		rl.addView(bankPrev, params);
-		
-		bankNext  = new Button(this);
+
+		bankNext = new Button(this);
 		bankNext.setOnClickListener(this);
 		bankNext.setText("Bank next");
 		params = new RelativeLayout.LayoutParams(w / 2, buttonHeight);
 		params.leftMargin = (w / 2) + (wOffset / 2);
-		params.topMargin =  h - buttonHeight;
+		params.topMargin = h - buttonHeight;
 		rl.addView(bankNext, params);
-		
-		text  = new TextView(this);
+
+		text = new TextView(this);
 		text.setText("****Android Open Elm****");
-		params = new RelativeLayout.LayoutParams(w, (hOffset / 2) );
-		params.leftMargin =  wOffset / 2;
-		params.topMargin =  h  ;
+		params = new RelativeLayout.LayoutParams(w, (hOffset / 2));
+		params.leftMargin = wOffset / 2;
+		params.topMargin = h;
 		rl.addView(text, params);
+
 	}
-	
+
 	public void onClick(View v) {
-		if(v == sensor1){
+		if (v == sensor1) {
 			SetSelectedElement(0);
-		}
-		else if(v == sensor2){
+		} else if (v == sensor2) {
 			SetSelectedElement(1);
-		}
-		else if(v == sensor3){
+		} else if (v == sensor3) {
 			SetSelectedElement(2);
-		}
-		else if(v == sensor4){
+		} else if (v == sensor4) {
 			SetSelectedElement(3);
-		}
-		else if(v == bankPrev){
-			maestro.NextBank(false);	
-		}
-		else if(v == bankNext){
+		} else if (v == bankPrev) {
+			maestro.NextBank(false);
+		} else if (v == bankNext) {
 			maestro.NextBank(true);
 		}
-		
-	
-		else if(v == button_read){
-			if(!connected)
+
+		else if (v == button_read) {
+			if (!connected)
 				return;
 			StringBuilder b = new StringBuilder();
 			maestro.core.ReadPort(b);
 			elm.setText(b.toString());
-			
-		}
-		else if(v == button_write){
-			if(!connected)
+
+		} else if (v == button_write) {
+			if (!connected)
 				return;
 			maestro.core.SendCommand(edittext.getText().toString());
 		}
@@ -298,7 +293,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	private void ElmStart() {
-		if(!connected)
+		if (!connected)
 			connected = maestro.Connect(deviceSelected);
 		if (connected)
 			maestro.Start();
@@ -334,32 +329,55 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		case R.id.elm_selectdevice:
 			return true;
 		case R.id.elm_connect:
-				connected = maestro.Connect(deviceSelected);
+			connected = maestro.Connect(deviceSelected);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	public void SetPidValue(int bankPosition, ElmBankElement elem, double value) {
-		//elm.setText(elem.getShortDescription() + "  " + Double.toString(value));
-		if(elem == gaugeElement)
-			gauge.setValue((float)(value * gaugeValueFactor));
-		for(int i = 0; i < 4; ++i){
+	private void updateUI() {
+		mRedrawHandler.sleep(100);
+		for (int i = 0; i < 4; i++) {
+			if ((currentElements[i] != null)
+					&& (currentElements[i] == gaugeElement))
+				gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
+
 			Button button = null;
-			switch(i){
-				case 0: button = sensor1; break;
-				case 1: button = sensor2; break;
-				case 2: button = sensor3; break;
-				case 3: button = sensor4; break;
+			switch (i) {
+			case 0:
+				button = sensor1;
+				break;
+			case 1:
+				button = sensor2;
+				break;
+			case 2:
+				button = sensor3;
+				break;
+			case 3:
+				button = sensor4;
+				break;
 			}
-			if(currentElements[i] != null){
-				button.setText(elem.getShortDescription() + " " + Double.toString(value));
-			}
-			else{
+			if (currentElements[i] != null) {
+				button.setText(currentElements[i].getShortDescription() + " "
+						+ Double.toString(currentElements[i].currentValue));
+			} else {
 				button.setText("");
 			}
-			
+
+		}
+
+	}
+
+	public void SetPidValue(int bankPosition, ElmBankElement elem, double value) {
+
+		for (int i = 0; i < 4; i++) {
+			if (elem == currentElements[i]) {
+				currentElements[i].currentValue = value;
+				break;
+
+			}
+
 		}
 	}
 
@@ -431,18 +449,17 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public void ClearSensorText(){
-		if(true)
-			return;
+
+	public void ClearSensorText() {
+
 		sensor1.setText("");
 		sensor2.setText("");
 		sensor3.setText("");
 		sensor4.setText("");
 	}
-	
-	private void CreateGauge(int idx){
-		//gauge = new LightGauge(this);
+
+	private void CreateGauge(int idx) {
+		// gauge = new LightGauge(this);
 		ElmBankElement elem = currentElements[idx];
 		GaugeSchema gs = elem.getGauge();
 		gaugeValueFactor = elem.getValuefactor();
@@ -450,10 +467,11 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		int incrementPerLargeNotch = gs.getIncrementLarge();
 		int incrementPerSmallNotch = gs.getIncrementSmall();
 		int notcheDisplayFactor = gs.getFactor();
-		gauge.setNotches(totalNotches, incrementPerLargeNotch, incrementPerSmallNotch, notcheDisplayFactor);
-		int scaleMinValue = (int)(gs.getScaleMin() ) ;
-		int scaleCenterValue = (int)(gs.getScaleCenter()) ;
-		int scaleMaxValue = (int)(gs.getScaleMax() ) ;
+		gauge.setNotches(totalNotches, incrementPerLargeNotch,
+				incrementPerSmallNotch, notcheDisplayFactor);
+		int scaleMinValue = (int) (gs.getScaleMin());
+		int scaleCenterValue = (int) (gs.getScaleCenter());
+		int scaleMaxValue = (int) (gs.getScaleMax());
 		gauge.setScale(scaleMinValue, scaleCenterValue, scaleMaxValue);
 		int r = gs.getFaceRed();
 		int g = gs.getFaceGreen();
@@ -467,32 +485,32 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		g = gs.getHandGreen();
 		b = gs.getHandBlue();
 		gauge.setHandColor(r, g, b);
-		float min = (float)(elem.getMinval() * gaugeValueFactor);
-		float warn = (float)(elem.getWarning() * gaugeValueFactor);
-		float err = (float)(elem.getError() * gaugeValueFactor);
-		float max = (float)(elem.getMaxval() * gaugeValueFactor);
+		float min = (float) (elem.getMinval() * gaugeValueFactor);
+		float warn = (float) (elem.getWarning() * gaugeValueFactor);
+		float err = (float) (elem.getError() * gaugeValueFactor);
+		float max = (float) (elem.getMaxval() * gaugeValueFactor);
 		gauge.setRangeOkValues(min, warn);
 		gauge.setRangeWarningValues(warn, err);
 		gauge.setRangeErrorValues(err, max);
 		gauge.setShowRange(true);
-        gauge.setShowGauge(true);
-        String lowerTitle = gs.getTitleLower();
-        String upperTitle = gs.getTitleUpper();
-        String unitTitle = gs.getTitleUnit();
-        gauge.setTitles(lowerTitle, upperTitle, unitTitle);
-        r = gs.getTitlesRed();
-        g = gs.getTitlesGreen();
-        b = gs.getTitlesBlue();
-        gauge.setTitlesColor(r, g, b);
-        gauge.init();
-        gauge.regenerateBackground();
-        gauge.invalidate();
-        gauge.setValue((float)elem.getMinval());
-        
+		gauge.setShowGauge(true);
+		String lowerTitle = gs.getTitleLower();
+		String upperTitle = gs.getTitleUpper();
+		String unitTitle = gs.getTitleUnit();
+		gauge.setTitles(lowerTitle, upperTitle, unitTitle);
+		r = gs.getTitlesRed();
+		g = gs.getTitlesGreen();
+		b = gs.getTitlesBlue();
+		gauge.setTitlesColor(r, g, b);
+		gauge.init();
+		gauge.regenerateBackground();
+		gauge.invalidate();
+		gauge.setValue((float) elem.getMinval());
+
 	}
-	
-	private void SetSelectedElement(int idx){
-		if(currentElements[idx] == null)
+
+	private void SetSelectedElement(int idx) {
+		if (currentElements[idx] == null)
 			return;
 		sensor1.setClickable(true);
 		sensor2.setClickable(true);
@@ -503,25 +521,47 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensor3.setBackgroundColor(Color.WHITE);
 		sensor4.setBackgroundColor(Color.WHITE);
 		Button button = null;
-		switch(idx){
-			case 0: button = sensor1; break;
-			case 1: button = sensor2; break;
-			case 2: button = sensor3; break;
-			case 3: button = sensor4; break;
+		switch (idx) {
+		case 0:
+			button = sensor1;
+			break;
+		case 1:
+			button = sensor2;
+			break;
+		case 2:
+			button = sensor3;
+			break;
+		case 3:
+			button = sensor4;
+			break;
 		}
 		button.setClickable(false);
 		button.setBackgroundColor(Color.LTGRAY);
 		CreateGauge(idx);
 		gaugeElement = currentElements[idx];
 	}
-	
-	public void GetCurrentElements(ElmBankElement[] _currentElements){
+
+	public void GetCurrentElements(ElmBankElement[] _currentElements) {
 		currentElements = _currentElements;
 		ClearSensorText();
-		if(currentElements[0] != null){
+		if (currentElements[0] != null) {
 			SetSelectedElement(0);
 		}
-			
+
 	}
+
+	private RefreshHandler mRedrawHandler = new RefreshHandler();
+
+	class RefreshHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			AndroidOpenElmActivity.this.updateUI();
+		}
+
+		public void sleep(long delayMillis) {
+			this.removeMessages(0);
+			sendMessageDelayed(obtainMessage(0), delayMillis);
+		}
+	};
 
 }
