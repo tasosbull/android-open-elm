@@ -125,25 +125,9 @@ public class ElmCore {
 
 	protected Globals.PROC_RES ProcessResponse(String cmd_sent,
 			StringBuilder msg_received) {
-		int i = 0;
-		boolean echo_on = true; // echo status
-		boolean is_hex_num = true;
-		StringBuilder temp_buf = new StringBuilder("");
-		echo_on = msg_received.toString().indexOf(cmd_sent) >= 0;
-		if (echo_on) {
-			msg_received = new StringBuilder(msg_received.toString().substring(
-					cmd_sent.length(),
-					msg_received.toString().length() - cmd_sent.length()));
-			SendCommand("ate0"); // turn off echo
-			Globals.READ_RES res = ReadPort(temp_buf);
-			if (res == Globals.READ_RES.PROMPT) {
-				SendCommand("atl0");
-				res = ReadPort(temp_buf);
-			}
-
-			msg_received = new StringBuilder(msg_received.toString().trim());
-		}
 		String str = msg_received.toString();
+		int i = 0;
+		boolean is_hex_num = true;
 		str = str.replace("SEARCHING...", "");
 		str = str.replace("BUS INIT: OK", "");
 		str = str.replace("BUS INIT: ...OK", "");
@@ -152,86 +136,87 @@ public class ElmCore {
 		str = str.replace(" ", "");
 		str = str.replace(">", "");
 		str = str.trim();
-		msg_received = new StringBuilder(str);
-		if ((msg_received.length() >= 10)
-				&& (msg_received.substring(0, 10) == "<")) {
-			if (msg_received.substring(0, 10).compareTo("<DATA ERROR") == 0)
+		msg_received.delete(0, msg_received.length());
+		msg_received.append(str);
+		if ((str.length() >= 10)
+				&& (str.substring(0, 10) == "<")) {
+			if (str.substring(0, 10).compareTo("<DATA ERROR") == 0)
 				return Globals.PROC_RES.DATA_ERROR2;
 			else
 				return Globals.PROC_RES.RUBBISH;
 		}
-		for (i = 0; i < msg_received.length(); i++) {
-			if (!CharIsHex(msg_received.charAt(i)))
+		for (i = 0; i < str.length(); i++) {
+			if (!CharIsHex(str.charAt(i)))
 				is_hex_num = false;
 
 		}
 		if (is_hex_num)
 			return Globals.PROC_RES.HEX_DATA;
-		if (msg_received.indexOf("UNABLETOCONNECT") >= 0) {
+		if (str.indexOf("UNABLETOCONNECT") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.UNABLE_TO_CONNECT));
 			return Globals.PROC_RES.UNABLE_TO_CONNECT;
 		}
-		if (msg_received.indexOf("BUSBUSY") >= 0) {
+		if (str.indexOf("BUSBUSY") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.BUS_BUSY));
 			return Globals.PROC_RES.BUS_BUSY;
 		}
-		if (msg_received.indexOf("DATAERROR") >= 0) {
+		if (str.indexOf("DATAERROR") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.DATA_ERROR));
 			return Globals.PROC_RES.DATA_ERROR;
 		}
-		if ((msg_received.indexOf("BUSERROR") >= 0)
-				|| (msg_received.indexOf("FBERROR") >= 0)) {
+		if ((str.indexOf("BUSERROR") >= 0)
+				|| (str.indexOf("FBERROR") >= 0)) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.BUS_ERROR));
 			return Globals.PROC_RES.BUS_ERROR;
 		}
-		if (msg_received.indexOf("CANERROR") >= 0) {
+		if (str.indexOf("CANERROR") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.CAN_ERROR));
 			return Globals.PROC_RES.CAN_ERROR;
 		}
-		if (msg_received.indexOf("BUFFERFULL") >= 0) {
+		if (str.indexOf("BUFFERFULL") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.BUFFER_FULL));
 			return Globals.PROC_RES.BUFFER_FULL;
 		}
 
-		if ((msg_received.indexOf("BUSINIT:ERROR") >= 0)
+		if ((str.indexOf("BUSINIT:ERROR") >= 0)
 				|| (msg_received.indexOf("BUSINIT:...ERROR") >= 0)) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.BUS_INIT_ERROR));
 			return Globals.PROC_RES.BUS_INIT_ERROR;
 		}
-		if ((msg_received.indexOf("BUS INIT:") >= 0)
+		if ((str.indexOf("BUS INIT:") >= 0)
 				|| (msg_received.indexOf("BUS INIT:...") >= 0)) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.SERIAL_ERROR));
 			return Globals.PROC_RES.SERIAL_ERROR;
 		}
-		if (msg_received.indexOf("?") >= 0) {
+		if (str.indexOf("?") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.UNKNOWN_CMD));
 			return Globals.PROC_RES.UNKNOWN_CMD;
 		}
-		if (msg_received.indexOf("ELM320") >= 0) {
+		if (str.indexOf("ELM320") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.INTERFACE_ELM320));
 			return Globals.PROC_RES.INTERFACE_ELM320;
 		}
-		if (msg_received.indexOf("ELM322") >= 0) {
+		if (str.indexOf("ELM322") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.INTERFACE_ELM322));
 			return Globals.PROC_RES.INTERFACE_ELM322;
 		}
-		if (msg_received.indexOf("ELM323") >= 0) {
+		if (str.indexOf("ELM323") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.INTERFACE_ELM323));
 			return Globals.PROC_RES.INTERFACE_ELM323;
 		}
-		if (msg_received.indexOf("ELM327") >= 0) {
+		if (str.indexOf("ELM327") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.INTERFACE_ELM327));
 			return Globals.PROC_RES.INTERFACE_ELM327;
 		}
-		if (msg_received.indexOf("OBDLink") >= 0) {
+		if (str.indexOf("OBDLink") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.INTERFACE_OBDLINK));
 			return Globals.PROC_RES.INTERFACE_OBDLINK;
 		}
-		if (msg_received.indexOf("SCANTOOL.NET") >= 0) {
+		if (str.indexOf("SCANTOOL.NET") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.STN_MFR_STRING));
 			return Globals.PROC_RES.STN_MFR_STRING;
 		}
-		if (msg_received.indexOf("OBDIItoRS232Interpreter") >= 0) {
+		if (str.indexOf("OBDIItoRS232Interpreter") >= 0) {
 			gui.AddError(BadResponseToString(Globals.PROC_RES.ELM_MFR_STRING));
 			return Globals.PROC_RES.ELM_MFR_STRING;
 		}
@@ -248,10 +233,13 @@ public class ElmCore {
 		String buf = response;
 		buf = buf.trim();
 		buf = buf.replace("\t", "");
+		buf = buf.replace(" ", "");
+		buf = buf.replace(">", "");
 		res = (buf.indexOf(filter) == 0);
 		if (res)
-			buf = buf.substring(filter.length(), buf.length() - filter.length());
-		strbuf = new StringBuilder(buf);
+			buf = buf.substring(filter.length(), buf.length() );
+		strbuf.delete(0, strbuf.length());
+		strbuf.append(buf);
 		return res;
 	}
 
@@ -262,7 +250,6 @@ public class ElmCore {
 		vehicle_response = new StringBuilder("");
 		SendCommand(cmd);
 		ReadPort(vehicle_response);
-
 		resState = ProcessResponse(cmd, vehicle_response);
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "41" + pid;
