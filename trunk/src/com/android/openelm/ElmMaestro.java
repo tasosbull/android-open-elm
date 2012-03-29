@@ -27,11 +27,11 @@
 // Short description of this file
 //************************************************************************************
 
-
 package com.android.openelm;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -76,29 +76,29 @@ public class ElmMaestro {
 		eval = new ExpressionEvaluator(_activity);
 		LoadXmlElements();
 		InitBanks();
-		if(!CreatePort())
+		if (!CreatePort())
 			return false;
 		CreateTimer();
 		core = new ElmCore(comPort, timer, gui);
 		return true;
 	}
-	
-	public List<String> AvailableBluetoothDevices(){
+
+	public List<String> AvailableBluetoothDevices() {
 		return comPort.GetNameDevices();
 	}
-	
-	public boolean Connect(String aDevice){
+
+	public boolean Connect(String aDevice) {
 		boolean result = comPort.Connect(aDevice);
-		if(result){
+		if (result) {
 			core.FastInit();
 		}
 		return result;
 	}
 
-	public void Disconnect(){
+	public void Disconnect() {
 		comPort.Disconnect();
 	}
-	
+
 	public void Start() {
 		_localTimer = new Timer();
 		_localTimer.schedule(new TimerTask() {
@@ -107,6 +107,7 @@ public class ElmMaestro {
 				TimerMethod();
 			}
 		}, 0, _timerRefresh);
+
 	}
 
 	public void Stop() {
@@ -114,10 +115,10 @@ public class ElmMaestro {
 			_localTimer.cancel();
 		}
 	}
-	
+
 	public String GetCommandResult(String command) {
 		return core.GetCommandResult(command);
-		
+
 	}
 
 	public double Evaluate(String formula, String data, int bytes) {
@@ -125,7 +126,7 @@ public class ElmMaestro {
 		String stbyte = "";
 		int byteValue = 0;
 		for (int i = 1; i <= bytes; i++) {
-			stbyte = data.substring(dataIndex, 2);
+			stbyte = data.substring(dataIndex, dataIndex + 2);
 			byteValue = core.HexToInt(stbyte);
 			dataIndex += 2;
 			formula = formula.replace("{" + Integer.toString(i) + "}",
@@ -163,9 +164,9 @@ public class ElmMaestro {
 
 	private Runnable Timer_Tick = new Runnable() {
 		public void run() {
-			//dummy
-			if (_elements.size() > 0) {
-				GetPidValue(_elements.get(0));
+			for (int i = 0; i < 4; ++i) {
+				if (_currentElements[i] != null)
+					GetPidValue(_currentElements[i]);
 			}
 		}
 	};
@@ -185,45 +186,43 @@ public class ElmMaestro {
 			e.printStackTrace();
 		}
 	}
-	
-	private void InitBanks(){
+
+	private void InitBanks() {
 		_banks = _elements.size() / _bankLayout;
-		if((_elements.size() % _bankLayout) > 0)
+		if ((_elements.size() % _bankLayout) > 0)
 			++_banks;
-		if(_banks > 0)
+		if (_banks > 0)
 			_currentBank = 1;
 		SetCurrentElements(_currentBank);
 	}
-	
-	private void SetCurrentElements(int bank){
-		_currentElements = new ElmBankElement[4] ;
+
+	private void SetCurrentElements(int bank) {
+		_currentElements = new ElmBankElement[4];
 		int startElement = 1;
-		if(bank > 1)
+		if (bank > 1)
 			startElement = (bank * _bankLayout) + 1;
-		if(startElement <= _elements.size()){
-			for (int i = 0; i < 4; ++i ){
-				if((startElement + i) > _elements.size())
+		if (startElement <= _elements.size()) {
+			for (int i = 0; i < 4; ++i) {
+				if ((startElement + i) > _elements.size())
 					break;
 				_currentElements[i] = _elements.get((startElement - 1) + i);
 			}
-		}
-		else{
+		} else {
 			InitBanks();
 			return;
 		}
 		gui.GetCurrentElements(_currentElements);
-		
+
 	}
-	
-	public void NextBank(boolean forward){
-		if(forward){
-				_currentBank = (_currentBank < _banks) ? _currentBank + 1 : 1;
-		}
-		else{
+
+	public void NextBank(boolean forward) {
+		if (forward) {
+			_currentBank = (_currentBank < _banks) ? _currentBank + 1 : 1;
+		} else {
 			_currentBank = (_currentBank <= 1) ? _banks : _currentBank - 1;
 		}
 		SetCurrentElements(_currentBank);
-		
+
 	}
 
 	private boolean CreatePort() {
@@ -278,7 +277,7 @@ public class ElmMaestro {
 	public void set_activity(Activity _activity) {
 		this._activity = _activity;
 	}
-	
+
 	public int get_currentBankElement() {
 		return _currentBankElement;
 	}
