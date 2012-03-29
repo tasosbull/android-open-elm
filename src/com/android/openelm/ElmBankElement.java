@@ -47,6 +47,7 @@ public class ElmBankElement implements Comparable<ElmBankElement> {
 	private double peakvalue;
 	private GaugeSchema gauge;
 	private double valuefactor;
+	public double currentValue;
 
 	public double getValuefactor() {
 		return valuefactor;

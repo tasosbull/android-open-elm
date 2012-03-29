@@ -56,7 +56,7 @@ public class ElmMaestro {
 	private List<ElmBankElement> _elements;
 	private ElmBankElement[] _currentElements = null;
 	private int _currentBankElement = -1;
-	private long _timerRefresh = 5;
+	private long _timerRefresh = 200;
 	private Timer _localTimer;
 	private boolean connected = false;
 	private ExpressionEvaluator eval = null;
@@ -65,6 +65,7 @@ public class ElmMaestro {
 	private IGui gui = null;
 	public ElmCore core = null;
 	private Pattern hex = Pattern.compile("^[0-9A-F]+$");
+	private int xxx = 0;
 
 	public ElmMaestro(IGui _gui) {
 		gui = _gui;
@@ -98,7 +99,7 @@ public class ElmMaestro {
 	public void Disconnect() {
 		comPort.Disconnect();
 	}
-
+	
 	public void Start() {
 		_localTimer = new Timer();
 		_localTimer.schedule(new TimerTask() {
@@ -109,6 +110,26 @@ public class ElmMaestro {
 		}, 0, _timerRefresh);
 
 	}
+	private void TimerMethod() {
+
+		if ((_activity != null))
+			_activity.runOnUiThread(Timer_Tick);
+		else {
+			if (_localTimer != null)
+				_localTimer.cancel();
+		}
+
+	}
+
+	private Runnable Timer_Tick = new Runnable() {
+		public void run() {
+			for (int i = 0; i < 4; ++i) {
+				if (_currentElements[i] != null)
+					GetPidValue(_currentElements[i]);
+			}
+		}
+	};
+
 
 	public void Stop() {
 		if (_localTimer != null) {
@@ -149,27 +170,6 @@ public class ElmMaestro {
 			gui.AddError(result);
 		}
 	}
-
-	private void TimerMethod() {
-		if (!connected)
-			_localTimer.cancel();
-		if ((_activity != null))
-			_activity.runOnUiThread(Timer_Tick);
-		else {
-			if (_localTimer != null)
-				_localTimer.cancel();
-		}
-
-	}
-
-	private Runnable Timer_Tick = new Runnable() {
-		public void run() {
-			for (int i = 0; i < 4; ++i) {
-				if (_currentElements[i] != null)
-					GetPidValue(_currentElements[i]);
-			}
-		}
-	};
 
 	private void LoadXmlElements() {
 		BaseParser parser = new BaseParser(_activity);
