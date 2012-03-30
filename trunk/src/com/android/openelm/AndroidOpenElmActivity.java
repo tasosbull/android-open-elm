@@ -327,6 +327,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			ElmStop();
 			return true;
 		case R.id.elm_selectdevice:
+			SelectDevice();
 			return true;
 		case R.id.elm_connect:
 			connected = maestro.Connect(deviceSelected);
@@ -339,10 +340,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	private void updateUI() {
 		mRedrawHandler.sleep(100);
 		for (int i = 0; i < 4; i++) {
-			if ((currentElements[i] != null)
-					&& (currentElements[i] == gaugeElement))
-				gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
-
 			Button button = null;
 			switch (i) {
 			case 0:
@@ -358,10 +355,12 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 				button = sensor4;
 				break;
 			}
-			if (currentElements[i] != null) {
+			if (currentElements[i] != null){
+				if(currentElements[i] == gaugeElement)
+					gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
 				button.setText(currentElements[i].getShortDescription() + " "
 						+ Double.toString(currentElements[i].currentValue));
-			} else {
+			}else {
 				button.setText("");
 			}
 
@@ -372,23 +371,19 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	public void SetPidValue(int bankPosition, ElmBankElement elem, double value) {
 
 		for (int i = 0; i < 4; i++) {
-			if (elem == currentElements[i]) {
+			if (elem.getId() == currentElements[i].getId()) {
 				currentElements[i].currentValue = value;
 				break;
-
 			}
-
 		}
 	}
 
 	private void elmPreferences() {
 		startActivity(new Intent(this, PreferencesFromXml.class));
-
 	}
 
 	public void AddError(String aError) {
 		text.setText(aError);
-
 	}
 
 	public void ProcMessages() {
