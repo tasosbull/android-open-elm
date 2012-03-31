@@ -26,8 +26,8 @@
   		<gauge_color_scale_rgb>0;0;0</gauge_color_scale_rgb>
   		<gauge_color_hand_rgb>255;0;0</gauge_color_hand_rgb>
   		<gauge_color_titles_rgb>255;0;0</gauge_color_titles_rgb>
-  		<gauge_title_lower>engine rpm</gauge_title_lower>
-  		<gauge_title_upper>rpm</gauge_title_upper>
+  		<gauge_title_lower>Engine RPM</gauge_title_lower>
+  		<gauge_title_upper>Engine RPM</gauge_title_upper>
   		<gauge_title_unit>RPM</gauge_title_unit>
 	</item>
 	<item>
@@ -55,8 +55,66 @@
   		<gauge_color_scale_rgb>0;0;0</gauge_color_scale_rgb>
   		<gauge_color_hand_rgb>255;0;0</gauge_color_hand_rgb>
   		<gauge_color_titles_rgb>255;0;0</gauge_color_titles_rgb>
-  		<gauge_title_lower>speed</gauge_title_lower>
-  		<gauge_title_upper>km/h</gauge_title_upper>
+  		<gauge_title_lower>Vehicle speed</gauge_title_lower>
+  		<gauge_title_upper>Vehicle speed</gauge_title_upper>
   		<gauge_title_unit>KM/H</gauge_title_unit>
+	</item>
+	<item>
+  		<id>3</id>
+  		<active>1</active>
+  		<obd_mode>01</obd_mode>
+  		<obd_pid>05</obd_pid>
+  		<obd_bytes>1</obd_bytes>
+  		<short_text>cl/temp</short_text>
+  		<description_text>coolant temp</description_text>
+		<value_factor>0.1</value_factor>
+  		<minval>-40</minval>
+  		<maxval>215</maxval>
+  		<warning>100</warning>
+  		<error>120</error>
+  		<formula>{1}-40</formula>
+  		<gauge_analog>1</gauge_analog>
+  		<gauge_notches_total>40</gauge_notches_total>
+  		<gauge_notches_increment_large>2</gauge_notches_increment_large>
+  		<gauge_notches_increment_small>1</gauge_notches_increment_small>
+  		<gauge_notches_display_factor>10</gauge_notches_display_factor>
+  		<gauge_scale_min_center_max>-40;16;22</gauge_scale_min_center_max>
+  		<gauge_visible_gauge_scale>1;1</gauge_visible_gauge_scale>
+  		<gauge_color_face_rgb>248;248;255</gauge_color_face_rgb>
+  		<gauge_color_scale_rgb>0;0;0</gauge_color_scale_rgb>
+  		<gauge_color_hand_rgb>255;0;0</gauge_color_hand_rgb>
+  		<gauge_color_titles_rgb>255;0;0</gauge_color_titles_rgb>
+  		<gauge_title_lower>Coolant temp</gauge_title_lower>
+  		<gauge_title_upper>Coolant temp</gauge_title_upper>
+  		<gauge_title_unit>CT</gauge_title_unit>
+	</item>
+	<item>
+  		<id>4</id>
+  		<active>1</active>
+  		<obd_mode>01</obd_mode>
+  		<obd_pid>04</obd_pid>
+  		<obd_bytes>1</obd_bytes>
+  		<short_text>e/l</short_text>
+  		<description_text>engine load</description_text>
+		<value_factor>0.1</value_factor>
+  		<minval>0</minval>
+  		<maxval>100</maxval>
+  		<warning>70</warning>
+  		<error>90</error>
+  		<formula>{1}*100/255</formula>
+  		<gauge_analog>1</gauge_analog>
+  		<gauge_notches_total>20</gauge_notches_total>
+  		<gauge_notches_increment_large>1</gauge_notches_increment_large>
+  		<gauge_notches_increment_small>1</gauge_notches_increment_small>
+  		<gauge_notches_display_factor>10</gauge_notches_display_factor>
+  		<gauge_scale_min_center_max>0;6;10</gauge_scale_min_center_max>
+  		<gauge_visible_gauge_scale>1;1</gauge_visible_gauge_scale>
+  		<gauge_color_face_rgb>248;248;255</gauge_color_face_rgb>
+  		<gauge_color_scale_rgb>0;0;0</gauge_color_scale_rgb>
+  		<gauge_color_hand_rgb>255;0;0</gauge_color_hand_rgb>
+  		<gauge_color_titles_rgb>255;0;0</gauge_color_titles_rgb>
+  		<gauge_title_lower>Engine load</gauge_title_lower>
+  		<gauge_title_upper>Engine load</gauge_title_upper>
+  		<gauge_title_unit>EL</gauge_title_unit>
 	</item>
 </obd_items>

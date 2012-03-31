@@ -31,18 +31,11 @@ package com.android.openelm;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Currency;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.regex.Pattern;
-
 import org.xmlpull.v1.XmlPullParserException;
-
 import com.android.openelm.interfaces.ICommPort;
 import com.android.openelm.interfaces.IGui;
-
-
 import android.app.Activity;
 
 public class ElmMaestro {
@@ -94,44 +87,7 @@ public class ElmMaestro {
 	public void Disconnect() {
 		comPort.Disconnect();
 	}
-/*	
-	public void Start() {
-		_localTimer = new Timer();
-		_localTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				TimerMethod();
-			}
-		}, 0, _timerRefresh);
 
-	}
-	private void TimerMethod() {
-
-		if ((_activity != null))
-			_activity.runOnUiThread(Timer_Tick);
-		else {
-			if (_localTimer != null)
-				_localTimer.cancel();
-		}
-
-	}
-
-	private Runnable Timer_Tick = new Runnable() {
-		public void run() {
-			for (int i = 0; i < 4; ++i) {
-				if (_currentElements[i] != null)
-					GetPidValue(_currentElements[i]);
-			}
-		}
-	};
-
-
-	public void Stop() {
-		if (_localTimer != null) {
-			_localTimer.cancel();
-		}
-	}
-*/
 	public String GetCommandResult(String command) {
 		return core.GetCommandResult(command);
 
@@ -233,8 +189,6 @@ public class ElmMaestro {
 		}
 		return true;
 	}
-
-
 
 	public int get_port() {
 		return _port;

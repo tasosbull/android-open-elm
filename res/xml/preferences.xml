@@ -13,14 +13,7 @@
                 android:entryValues="@array/elm_proto_preference_value"
                 android:dialogTitle="@string/elm_proto" />
     
-        <ListPreference
-                android:key="list_preference_bank"
-                android:title="@string/elm_bank"
-                android:summary="@string/elm_bank_setup"
-                android:entries="@array/elm_bank"
-                android:entryValues="@array/elm_bank_values"
-                android:dialogTitle="@string/elm_bank" />
-
+ 
         <ListPreference
                 android:key="list_preference_port"
                 android:title="@string/elm_com_port"
@@ -30,11 +23,29 @@
                 android:dialogTitle="@string/elm_com_port" />
                 
         <EditTextPreference
+                android:key="preference_refresh_interval"
+                android:title="@string/elm_refresh_interval"
+                android:defaultValue="500"
+                android:summary="@string/elm_refresh_interval_setup"
+	            android:dialogMessage="Select refresh interval"   
+                android:dialogTitle="@string/elm_refresh_interval" />
+                
+        <EditTextPreference
+                android:key="preference_screen_offset"
+                android:title="@string/elm_screen_offset"
+                android:defaultValue="100"
+                android:summary="@string/elm_screen_offset_setup"
+	            android:dialogMessage="Select Screen offset"   
+                android:dialogTitle="@string/elm_screen_offset" />
+                
+                
+                
+        <EditTextPreference
 	            android:key="device_selected"
-	            android:title="device selected"
-	            android:summary="device selected"
+	            android:title="Device selected"
+	            android:summary="Device selected"
 	            android:dialogTitle="Device"
-	            android:dialogMessage="Provide a message"   
+	            android:dialogMessage="Select device"   
 	            android:defaultValue="" />
                 
     </PreferenceCategory>
