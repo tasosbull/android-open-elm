@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import com.android.openelm.interfaces.ICommPort;
 import com.android.openelm.interfaces.IGui;
-import com.android.openelm.interfaces.ITimer;
+
 
 public class ElmCore {
 	private StringBuilder vehicle_response;
@@ -43,12 +43,12 @@ public class ElmCore {
 	public Globals.RESETSTATE state;
 
 	ICommPort comm;
-	public ITimer timer;
+
 	IGui gui;
 
-	public ElmCore(ICommPort aCommPort, ITimer aTimer, IGui aGui) {
+	public ElmCore(ICommPort aCommPort, IGui aGui) {
 		comm = aCommPort;
-		timer = aTimer;
+
 		gui = aGui;
 	}
 
@@ -59,7 +59,7 @@ public class ElmCore {
 
 	protected void Wait() {
 		try {
-			while ((comm.HasData() <= 0) && (!timer.isErrorTimeout()))
+			while ((comm.HasData() <= 0) )
 				gui.ProcMessages();
 		} catch (IOException e) {
 			gui.AddError(e.getMessage());
@@ -74,8 +74,7 @@ public class ElmCore {
 
 	public int ReadQueue(StringBuilder response) {
 		Wait();
-		if (timer.isErrorTimeout())
-			return 0;
+		
 		return comm.ReadData(response);
 
 	}

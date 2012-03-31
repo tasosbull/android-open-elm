@@ -98,7 +98,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	Button bankNext = null;
 	RelativeLayout rl = null;
 	int iDbg = 0;
-
+	boolean elmStarted = false;
+	int refreshMs = 200; //TODO add to preferences 
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,25 +118,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		 * button_read.setOnClickListener(this);
 		 * button_write.setOnClickListener(this); InitMaestro();
 		 */
-		// getPrefs();
-		/*
-		 * setContentView(R.layout.main); TextView testXmlContent =
-		 * (TextView)findViewById(R.id.elm); ExpressionEvaluator eval = new
-		 * ExpressionEvaluator(this); double value = eval.Evaluate( "1+1");
-		 * testXmlContent.setText(Double.toString(value));
-		 */
-
-		/*
-		 * //test xml file String str = ""; BaseParser parser = new
-		 * BaseParser(this); try { List<ElmBankElement> elements =
-		 * parser.parse(); for(int i = 0; i < elements.size(); i++){
-		 * ElmBankElement elem = elements.get(i); str = str + elem.toString() ;
-		 * } testXmlContent.setText(str); } catch (XmlPullParserException e) {
-		 * // TODO Auto-generated catch block e.printStackTrace(); } catch
-		 * (IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
-
 	}
 
 	private void InitSensorUI() {
@@ -293,17 +277,11 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	private void ElmStart() {
-		if (!connected)
-			connected = maestro.Connect(deviceSelected);
-		if (connected)
-			maestro.Start();
+		elmStarted = true;
 	}
 
 	private void ElmStop() {
-		if (maestro != null) {
-			maestro.Stop();
-			maestro.Disconnect();
-		}
+		elmStarted = false;
 	}
 
 	private void SelectDevice() {
@@ -330,7 +308,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			SelectDevice();
 			return true;
 		case R.id.elm_connect:
-			connected = maestro.Connect(deviceSelected);
+			maestro.Connect(deviceSelected);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -338,7 +316,9 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	private void updateUI() {
-		mRedrawHandler.sleep(100);
+		mRedrawHandler.sleep(refreshMs);
+		try{
+		ClearSensorText();
 		for (int i = 0; i < 4; i++) {
 			Button button = null;
 			switch (i) {
@@ -356,6 +336,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 				break;
 			}
 			if (currentElements[i] != null){
+				maestro.GetPidValue(currentElements[i]);
 				if(currentElements[i] == gaugeElement)
 					gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
 				button.setText(currentElements[i].getShortDescription() + " "
@@ -365,17 +346,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			}
 
 		}
-
-	}
-
-	public void SetPidValue(int bankPosition, ElmBankElement elem, double value) {
-
-		for (int i = 0; i < 4; i++) {
-			if (elem.getId() == currentElements[i].getId()) {
-				currentElements[i].currentValue = value;
-				break;
-			}
+		}catch(Exception ex){
+			AddError(ex.getMessage());
 		}
+
 	}
 
 	private void elmPreferences() {
