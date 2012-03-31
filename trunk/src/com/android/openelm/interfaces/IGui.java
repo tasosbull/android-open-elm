@@ -42,7 +42,7 @@ public interface IGui {
 
 	public int GetBankLayoutElementsSelected();
 
-	public String GetSelectedDevice();
+//	public String GetSelectedDevice();
 
 	public void GetCurrentElements(ElmBankElement[] _currentElements);
 

@@ -59,11 +59,7 @@ import android.widget.TextView;
 
 public class AndroidOpenElmActivity extends Activity implements IGui,
 		OnClickListener {
-	/*
-	 * add initialize menu button add select device menu button
-	 * 
-	 * *
-	 */
+
 	int port = 1;
 	int elmProto = 0;
 	int bankLayout = 4;
@@ -82,7 +78,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	int buttonSelectedColor = Color.GREEN;
 	int sensorTextSize = 12;
 
-	int wOffset = 100; // todo application param
+	int wOffset = 100; 
 	int hOffset = 100;
 
 	LightGauge gauge = null;
@@ -97,11 +93,26 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	RelativeLayout rl = null;
 	int idbg = 0;
 	boolean elmStarted = false;
-	int refreshMs = 500; // TODO add to preferences
+	int refreshMs = 500; 
+	
+	private RefreshHandler mRedrawHandler = new RefreshHandler();
+
+	class RefreshHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			AndroidOpenElmActivity.this.updateUI();
+		}
+
+		public void sleep(long delayMillis) {
+			this.removeMessages(0);
+			sendMessageDelayed(obtainMessage(0), delayMillis);
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		InitSensorUI();
 		InitMaestro();
 		updateUI();
@@ -119,7 +130,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 
 	private void InitSensorUI() {
 
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.main);
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -252,7 +262,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		maestro = new ElmMaestro(this);
 		maestro.set_activity(this);
 		maestro.set_port(port);
-		maestro.set_bankLayout(bankLayout);
+		maestro.set_bankLayout(4);
 		maestro.set_elmProto(elmProto);
 		maestro.set_timerRefresh(5);
 		try {
@@ -389,8 +399,12 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		port = Integer.parseInt(prefs.getString("list_preference_port", "1"));
 		elmProto = Integer.parseInt(prefs.getString("list_preference_proto",
 				"0"));
-		String bankStr = prefs.getString("list_preference_bank", "4");
-		bankLayout = Integer.parseInt(bankStr);
+		hOffset =  Integer.parseInt(prefs.getString("preference_screen_offset",
+				"100"));
+		wOffset =  Integer.parseInt(prefs.getString("preference_screen_offset",
+				"100"));
+		refreshMs =  Integer.parseInt(prefs.getString("preference_refresh_interval",
+				"500"));
 		deviceSelected = prefs.getString("device_selected", "");
 	}
 
@@ -420,11 +434,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 
 	}
 
-	public String GetSelectedDevice() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void ClearSensorText() {
 
 		sensor1.setText("");
@@ -434,7 +443,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	private void CreateGauge(int idx) {
-		// gauge = new LightGauge(this);
 		ElmBankElement elem = currentElements[idx];
 		GaugeSchema gs = elem.getGauge();
 		gaugeValueFactor = elem.getValuefactor();
@@ -527,21 +535,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		if (currentElements[0] != null) {
 			SetSelectedElement(0);
 		}
-
 	}
 
-	private RefreshHandler mRedrawHandler = new RefreshHandler();
-
-	class RefreshHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			AndroidOpenElmActivity.this.updateUI();
-		}
-
-		public void sleep(long delayMillis) {
-			this.removeMessages(0);
-			sendMessageDelayed(obtainMessage(0), delayMillis);
-		}
-	};
 
 }

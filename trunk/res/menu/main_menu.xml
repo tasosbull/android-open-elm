@@ -11,6 +11,5 @@
         android:title="@string/elm_start" />
     <item android:id="@+id/elm_stop"
         android:title="@string/elm_stop" />
-    <item android:id="@+id/elm_exit"
-        android:title="@string/elm_exit" />
+
 </menu>
