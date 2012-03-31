@@ -44,6 +44,7 @@ import com.android.openelm.interfaces.IGui;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.location.Address;
 
 public class ConcreteCommPort implements ICommPort {
 	Set<BluetoothDevice> pairedDevices = null;
@@ -100,14 +101,10 @@ public class ConcreteCommPort implements ICommPort {
 	}
 
 	public boolean Connect(String deviceName) {
-//		if (socket != null) {
-//			try {
-//				socket.close();
-//			} catch (IOException ex) {
-//				SetError("IOException " + ex.getMessage());
-//				return false;
-//			}
-//		}
+		if (socket != null) {
+		
+			return true;
+		}
 		bluetoothAdapter.cancelDiscovery();
 		if (deviceName == null) {
 			SetError("You must select a bluetooth device");

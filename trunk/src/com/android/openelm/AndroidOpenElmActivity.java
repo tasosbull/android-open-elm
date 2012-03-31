@@ -47,7 +47,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.provider.Contacts.Intents.UI;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -97,11 +96,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	Button bankPrev = null;
 	Button bankNext = null;
 	RelativeLayout rl = null;
-	int iDbg = 0;
+	int idbg = 0;
 	boolean elmStarted = false;
-	int refreshMs = 200; //TODO add to preferences 
-	
-	
+	int refreshMs = 500; // TODO add to preferences
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -316,37 +314,40 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	private void updateUI() {
-		mRedrawHandler.sleep(refreshMs);
-		try{
-		ClearSensorText();
-		for (int i = 0; i < 4; i++) {
-			Button button = null;
-			switch (i) {
-			case 0:
-				button = sensor1;
-				break;
-			case 1:
-				button = sensor2;
-				break;
-			case 2:
-				button = sensor3;
-				break;
-			case 3:
-				button = sensor4;
-				break;
-			}
-			if (currentElements[i] != null){
-				maestro.GetPidValue(currentElements[i]);
-				if(currentElements[i] == gaugeElement)
-					gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
-				button.setText(currentElements[i].getShortDescription() + " "
-						+ Double.toString(currentElements[i].currentValue));
-			}else {
-				button.setText("");
-			}
+		try {
+			ClearSensorText();
+			for (int i = 0; i < 4; i++) {
+				mRedrawHandler.sleep(refreshMs / 4);
+				Button button = null;
+				switch (i) {
+				case 0:
+					button = sensor1;
+					break;
+				case 1:
+					button = sensor2;
+					break;
+				case 2:
+					button = sensor3;
+					break;
+				case 3:
+					button = sensor4;
+					break;
+				}
+				if (currentElements[i] != null) {
+					if (elmStarted) {
+						maestro.GetPidValue(currentElements[i]);
+						if (currentElements[i] == gaugeElement)
+							gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
+						button.setText(currentElements[i].getShortDescription()
+								+ " "
+								+ Double.toString(currentElements[i].currentValue));
+					}
+				} else {
+					button.setText("");
+				}
 
-		}
-		}catch(Exception ex){
+			}
+		} catch (Exception ex) {
 			AddError(ex.getMessage());
 		}
 
