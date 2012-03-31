@@ -41,7 +41,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import com.android.openelm.interfaces.ICommPort;
 import com.android.openelm.interfaces.IGui;
-import com.android.openelm.interfaces.ITimer;
+
 
 import android.app.Activity;
 
@@ -57,15 +57,11 @@ public class ElmMaestro {
 	private ElmBankElement[] _currentElements = null;
 	private int _currentBankElement = -1;
 	private long _timerRefresh = 200;
-	private Timer _localTimer;
-	private boolean connected = false;
 	private ExpressionEvaluator eval = null;
 	private ICommPort comPort = null;
-	private ITimer timer = null;
 	private IGui gui = null;
 	public ElmCore core = null;
 	private Pattern hex = Pattern.compile("^[0-9A-F]+$");
-	private int xxx = 0;
 
 	public ElmMaestro(IGui _gui) {
 		gui = _gui;
@@ -79,8 +75,7 @@ public class ElmMaestro {
 		InitBanks();
 		if (!CreatePort())
 			return false;
-		CreateTimer();
-		core = new ElmCore(comPort, timer, gui);
+		core = new ElmCore(comPort, gui);
 		return true;
 	}
 
@@ -99,7 +94,7 @@ public class ElmMaestro {
 	public void Disconnect() {
 		comPort.Disconnect();
 	}
-	
+/*	
 	public void Start() {
 		_localTimer = new Timer();
 		_localTimer.schedule(new TimerTask() {
@@ -136,7 +131,7 @@ public class ElmMaestro {
 			_localTimer.cancel();
 		}
 	}
-
+*/
 	public String GetCommandResult(String command) {
 		return core.GetCommandResult(command);
 
@@ -163,7 +158,7 @@ public class ElmMaestro {
 			double evaluated = Evaluate(elem.getFormula(), result,
 					elem.getNumbytes());
 			if (!elem.getMode().equals("CALC")) {
-				gui.SetPidValue(0, elem, evaluated);
+				elem.currentValue = evaluated;
 			}
 
 		} else {
@@ -239,10 +234,7 @@ public class ElmMaestro {
 		return true;
 	}
 
-	private void CreateTimer() {
-		if (timer == null)
-			timer = new ConcreteTimer();
-	}
+
 
 	public int get_port() {
 		return _port;
