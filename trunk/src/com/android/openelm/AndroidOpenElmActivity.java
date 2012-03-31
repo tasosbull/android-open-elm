@@ -36,7 +36,6 @@ import com.android.openelm.interfaces.IGui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -142,6 +141,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensor1.setTextSize(sensorTextSize);
 		sensor1.setText(new StringBuffer("test 12"));
 		sensor1.setBackgroundColor(Color.WHITE);
+		sensor1.setTextColor(Color.BLACK);
 		params = new RelativeLayout.LayoutParams(w / 4, buttonHeight);
 		params.leftMargin = wOffset / 2;
 		params.topMargin = h - (buttonHeight * 2);
@@ -152,6 +152,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensor2.setTextSize(sensorTextSize);
 		sensor2.setText(new StringBuffer("test 12"));
 		sensor2.setBackgroundColor(Color.WHITE);
+		sensor2.setTextColor(Color.BLACK);
 		params = new RelativeLayout.LayoutParams(w / 4, buttonHeight);
 		params.leftMargin = (w / 4) + (wOffset / 2);
 		params.topMargin = h - (buttonHeight * 2);
@@ -161,6 +162,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensor3.setOnClickListener(this);
 		sensor3.setTextSize(sensorTextSize);
 		sensor3.setBackgroundColor(Color.WHITE);
+		sensor3.setTextColor(Color.BLACK);
+
 		params = new RelativeLayout.LayoutParams(w / 4, buttonHeight);
 		params.leftMargin = ((w / 4) * 2) + (wOffset / 2);
 		params.topMargin = h - (buttonHeight * 2);
@@ -170,6 +173,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensor4.setOnClickListener(this);
 		sensor4.setTextSize(sensorTextSize);
 		sensor4.setBackgroundColor(Color.WHITE);
+		sensor4.setTextColor(Color.BLACK);
+
 		params = new RelativeLayout.LayoutParams(w / 4, buttonHeight);
 		params.leftMargin = ((w / 4) * 3) + (wOffset / 2);
 		params.topMargin = h - (buttonHeight * 2);
@@ -490,6 +495,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensor2.setBackgroundColor(Color.WHITE);
 		sensor3.setBackgroundColor(Color.WHITE);
 		sensor4.setBackgroundColor(Color.WHITE);
+		sensor1.setTextColor(Color.BLACK);
+		sensor2.setTextColor(Color.BLACK);
+		sensor3.setTextColor(Color.BLACK);
+		sensor4.setTextColor(Color.BLACK);
 		Button button = null;
 		switch (idx) {
 		case 0:
@@ -506,7 +515,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			break;
 		}
 		button.setClickable(false);
-		button.setBackgroundColor(Color.LTGRAY);
+		button.setBackgroundColor(Color.GREEN);
+		button.setTextColor(Color.WHITE);
 		CreateGauge(idx);
 		gaugeElement = currentElements[idx];
 	}
