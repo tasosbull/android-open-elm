@@ -30,8 +30,10 @@
 package com.android.openelm;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.xmlpull.v1.XmlPullParserException;
 import com.android.openelm.interfaces.ICommPort;
@@ -55,6 +57,7 @@ public class ElmMaestro {
 	private IGui gui = null;
 	public ElmCore core = null;
 	private Pattern hex = Pattern.compile("^[0-9A-F]+$");
+	private Pattern calc = Pattern.compile("(?i)(\\{)(.+?)(\\})");
 
 	public ElmMaestro(IGui _gui) {
 		gui = _gui;
@@ -107,19 +110,36 @@ public class ElmMaestro {
 		return eval.Evaluate(formula);
 	}
 
-	public void GetPidValue(ElmBankElement elem) {
+	
+	public void GetPidOriginalValue(ElmBankElement elem) {
 		String result = "";
 		result = core.GetPidResponse(elem.getPid(), elem.getNumbytes());
 		if (hex.matcher(result).matches()) {
 			double evaluated = Evaluate(elem.getFormula(), result,
 					elem.getNumbytes());
-			if (!elem.getMode().equals("CALC")) {
-				elem.currentValue = evaluated;
-			}
-
+			elem.currentValue = evaluated;
 		} else {
 			gui.AddError(result);
 		}
+		
+	}
+	
+	
+	public void GetPidValue(ElmBankElement elem) {
+		if (!elem.getMode().equals("CALC")) {
+			GetPidOriginalValue(elem);
+
+		} else {
+			String formula = elem.getFormula();
+			Matcher matcher = calc.matcher(formula);
+			while (matcher.find()) {
+				String original = matcher.group();
+				String found = original.replace("{", "").replace("}", "");
+			}
+
+
+		}
+
 	}
 
 	private void LoadXmlElements() {
@@ -238,6 +258,13 @@ public class ElmMaestro {
 
 	public void set_timerRefresh(long _timerRefresh) {
 		this._timerRefresh = _timerRefresh;
+	}
+	
+	class CalcPair{
+		public String pid;
+		public int bytes;
+		public String original;
+		public double value;
 	}
 
 }
