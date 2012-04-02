@@ -94,6 +94,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	int idbg = 0;
 	boolean elmStarted = false;
 	int refreshMs = 500; 
+	int sensorsPerTime = 4;
 	
 	private RefreshHandler mRedrawHandler = new RefreshHandler();
 
@@ -307,25 +308,33 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
+		boolean oldStarted = elmStarted;
+		elmStarted = false;
 		switch (item.getItemId()) {
 		case R.id.elm_preferences:
 			elmPreferences();
+			elmStarted = oldStarted;
 			return true;
 		case R.id.elm_start:
 			ElmStart();
+			elmStarted = oldStarted;
 			return true;
 		case R.id.elm_stop:
 			ElmStop();
+			elmStarted = oldStarted;
 			return true;
 		case R.id.elm_selectdevice:
 			SelectDevice();
+			elmStarted = oldStarted;
 			return true;
 		case R.id.elm_connect:
 			maestro.Connect(deviceSelected);
+			elmStarted = oldStarted;
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+		
 	}
 
 	private void updateUI() {
@@ -351,8 +360,9 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 				if (currentElements[i] != null) {
 					if (elmStarted) {
 						maestro.GetPidValue(currentElements[i]);
-						if (currentElements[i] == gaugeElement)
+						if (currentElements[i] == gaugeElement){
 							gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
+						}
 						button.setText(currentElements[i].getShortDescription()
 								+ " "
 								+ Double.toString(currentElements[i].currentValue));
@@ -391,6 +401,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		return bankLayout;
 
 	}
+	
 
 	private void getPrefs() {
 		Context ctx = this.getBaseContext();
@@ -406,6 +417,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		refreshMs =  Integer.parseInt(prefs.getString("preference_refresh_interval",
 				"500"));
 		deviceSelected = prefs.getString("device_selected", "");
+		sensorsPerTime = Integer.parseInt(prefs.getString("list_preference_read_sensors",
+				"4")); 
+		InitSensorUI();
+		//InitMaestro(); 
 	}
 
 	public void SetDevice(String item) {

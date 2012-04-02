@@ -10,10 +10,10 @@ package com.android.openelm;
 public final class R {
     public static final class array {
         public static final int elm_bank=0x7f050002;
-        public static final int elm_bank_values=0x7f050003;
         public static final int elm_com_port=0x7f050004;
         public static final int elm_proto_preference=0x7f050000;
         public static final int elm_proto_preference_value=0x7f050001;
+        public static final int elm_read_sensors=0x7f050003;
     }
     public static final class attr {
     }
@@ -59,6 +59,8 @@ public final class R {
         public static final int elm_proto_J1850_2=0x7f06000b;
         public static final int elm_proto_auto=0x7f060009;
         public static final int elm_proto_setup=0x7f060008;
+        public static final int elm_read_sensors_pertime=0x7f06001e;
+        public static final int elm_read_sensors_pertime_setup=0x7f06001d;
         public static final int elm_refresh_interval=0x7f060019;
         public static final int elm_refresh_interval_setup=0x7f06001a;
         public static final int elm_screen_offset=0x7f06001b;

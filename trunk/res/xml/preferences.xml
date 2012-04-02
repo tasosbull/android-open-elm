@@ -22,6 +22,17 @@
                 android:entryValues="@array/elm_com_port"
                 android:dialogTitle="@string/elm_com_port" />
                 
+                
+        <ListPreference
+                android:key="list_preference_read_sensors"
+                android:title="@string/elm_read_sensors_pertime"
+                android:summary="@string/elm_read_sensors_pertime_setup"
+                android:entries="@array/elm_read_sensors"
+                android:entryValues="@array/elm_read_sensors"
+                android:defaultValue="4"
+                android:dialogTitle="@string/elm_read_sensors_pertime" />
+                
+                
         <EditTextPreference
                 android:key="preference_refresh_interval"
                 android:title="@string/elm_refresh_interval"

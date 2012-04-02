@@ -31,9 +31,8 @@
         <item>Four values per bank</item>
     </string-array>
 
-    <string-array name="elm_bank_values">
+    <string-array name="elm_read_sensors">
         <item>1</item>
-        <item>2</item>
         <item>4</item>
     </string-array>
 
