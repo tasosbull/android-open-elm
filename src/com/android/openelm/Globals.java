@@ -30,6 +30,7 @@
 package com.android.openelm;
 
 public class Globals {
+	public enum ELM_MODE{ SENSOR, CONSOLE, CHECK_ENGINE };
 	public enum ELM_METRICS { METRICS1, METRICS2};
 	public enum READ_RES {EMPTY, DATA, PROMPT, READ_ERROR };
 	public enum COM_STATUS { READY, NOT_OPEN, USER_IGNORED };
