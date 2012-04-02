@@ -30,6 +30,8 @@
     <string name="elm_refresh_interval_setup">Refresh interval setup</string>
     <string name="elm_screen_offset">Screen offset</string>
     <string name="elm_screen_offset_setup">Screen offset setup</string>
+    <string name="elm_read_sensors_pertime_setup">Sensors per time setup</string>
+    <string name="elm_read_sensors_pertime">Sensors per time</string>
     
     
 
