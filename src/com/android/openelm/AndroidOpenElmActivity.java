@@ -60,6 +60,8 @@ import android.widget.TextView;
 public class AndroidOpenElmActivity extends Activity implements IGui,
 		OnClickListener {
 
+	Globals.ELM_MODE elm_mode = Globals.ELM_MODE.SENSOR;
+	
 	int port = 1;
 	int elmProto = 0;
 	int bankLayout = 4;
