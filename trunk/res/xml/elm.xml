@@ -36,7 +36,7 @@
   		<obd_mode>01</obd_mode>
   		<obd_pid>0D</obd_pid>
   		<obd_bytes>1</obd_bytes>
-  		<short_text>km/h</short_text>
+  		<short_text>km</short_text>
   		<description_text>vehicle speed</description_text>
 		<value_factor>0.1</value_factor>
   		<minval>0</minval>
@@ -65,7 +65,7 @@
   		<obd_mode>01</obd_mode>
   		<obd_pid>05</obd_pid>
   		<obd_bytes>1</obd_bytes>
-  		<short_text>cl/temp</short_text>
+  		<short_text>tmp</short_text>
   		<description_text>coolant temp</description_text>
 		<value_factor>0.1</value_factor>
   		<minval>-40</minval>
@@ -94,7 +94,7 @@
   		<obd_mode>01</obd_mode>
   		<obd_pid>04</obd_pid>
   		<obd_bytes>1</obd_bytes>
-  		<short_text>e/l</short_text>
+  		<short_text>el</short_text>
   		<description_text>engine load</description_text>
 		<value_factor>0.1</value_factor>
   		<minval>0</minval>

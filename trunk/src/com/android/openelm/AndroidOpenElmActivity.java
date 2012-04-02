@@ -340,8 +340,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	private void updateUI() {
 		try {
 			ClearSensorText();
+			mRedrawHandler.sleep(refreshMs);
 			for (int i = 0; i < 4; i++) {
-				mRedrawHandler.sleep(refreshMs / 4);
 				Button button = null;
 				switch (i) {
 				case 0:
@@ -358,8 +358,25 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 					break;
 				}
 				if (currentElements[i] != null) {
+					button.setText(currentElements[i].getShortDescription());
 					if (elmStarted) {
-						maestro.GetPidValue(currentElements[i]);
+						if(sensorsPerTime == 4){
+							maestro.GetPidValue(currentElements[i]);
+							button.setText(currentElements[i].getShortDescription()
+									+ " "
+									+ Double.toString(currentElements[i].currentValue));
+						}
+						else{
+							if (currentElements[i] == gaugeElement){
+								maestro.GetPidValue(currentElements[i]);
+								button.setText(currentElements[i].getShortDescription()
+										+ " "
+										+ Double.toString(currentElements[i].currentValue));
+							}
+							else{
+								button.setText(currentElements[i].getShortDescription());
+							}
+						}
 						if (currentElements[i] == gaugeElement){
 							gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
 						}
@@ -367,15 +384,14 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 								+ " "
 								+ Double.toString(currentElements[i].currentValue));
 					}
-				} else {
+				} 
+				else {
 					button.setText("");
 				}
-
 			}
 		} catch (Exception ex) {
 			AddError(ex.getMessage());
 		}
-
 	}
 
 	private void elmPreferences() {
