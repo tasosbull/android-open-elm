@@ -74,11 +74,11 @@
   		<error>120</error>
   		<formula>{1}-40</formula>
   		<gauge_analog>1</gauge_analog>
-  		<gauge_notches_total>40</gauge_notches_total>
+  		<gauge_notches_total>64</gauge_notches_total>
   		<gauge_notches_increment_large>2</gauge_notches_increment_large>
   		<gauge_notches_increment_small>1</gauge_notches_increment_small>
   		<gauge_notches_display_factor>10</gauge_notches_display_factor>
-  		<gauge_scale_min_center_max>-40;16;22</gauge_scale_min_center_max>
+  		<gauge_scale_min_center_max>-40;-10;22</gauge_scale_min_center_max>
   		<gauge_visible_gauge_scale>1;1</gauge_visible_gauge_scale>
   		<gauge_color_face_rgb>248;248;255</gauge_color_face_rgb>
   		<gauge_color_scale_rgb>0;0;0</gauge_color_scale_rgb>
