@@ -66,7 +66,7 @@ public class LightGauge extends View {
 
 	private  float degreesPerNotch = 360.0f/totalNotches;	
 	private static final float scalePosition = 0.12f; 
-	private static final float titlePosition = 0.145f;
+	private static final float titlePosition = 0.180f;   //0.145f
 	private static final float unitPosition  = 0.300f;
 
 	private String lowerTitle = "";
@@ -293,7 +293,7 @@ public class LightGauge extends View {
 		upperTitlePaint.setAntiAlias(true);
 		upperTitlePaint.setTypeface(Typeface.DEFAULT_BOLD);
 		upperTitlePaint.setTextAlign(Paint.Align.CENTER);
-		upperTitlePaint.setTextSize(0.04f);
+		upperTitlePaint.setTextSize(0.06f);
 		upperTitlePaint.setTextScaleX(0.8f);
 
 		lowerTitlePaint = new Paint();
@@ -301,7 +301,7 @@ public class LightGauge extends View {
 		lowerTitlePaint.setAntiAlias(true);
 		lowerTitlePaint.setTypeface(Typeface.DEFAULT_BOLD);
 		lowerTitlePaint.setTextAlign(Paint.Align.CENTER);
-		lowerTitlePaint.setTextSize(0.04f);
+		lowerTitlePaint.setTextSize(0.06f);
 		lowerTitlePaint.setTextScaleX(0.8f);
 		
 		unitPath = new Path();

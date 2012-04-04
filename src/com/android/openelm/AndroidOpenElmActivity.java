@@ -65,6 +65,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	int port = 1;
 	int elmProto = 0;
 	int bankLayout = 4;
+	boolean maestroInitialized = false;
 	ElmMaestro maestro = null;
 	EditText edittext = null;
 	TextView text = null;
@@ -78,7 +79,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	boolean initialized = false;
 	ElmBankElement[] currentElements;
 	int buttonSelectedColor = Color.GREEN;
-	int sensorTextSize = 12;
+	int sensorTextSize = 16;
 
 	int wOffset = 100; 
 	int hOffset = 100;
@@ -118,6 +119,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		InitSensorUI();
 		InitMaestro();
+		maestroInitialized = true;
 		updateUI();
 		/*
 		 * setContentView(R.layout.main); elm = (TextView)
@@ -215,6 +217,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		params.leftMargin = wOffset / 2;
 		params.topMargin = h;
 		rl.addView(text, params);
+		if(maestroInitialized)
+			this.onClick(sensor1);
 
 	}
 
@@ -319,7 +323,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			return true;
 		case R.id.elm_start:
 			ElmStart();
-			elmStarted = oldStarted;
 			return true;
 		case R.id.elm_stop:
 			ElmStop();
@@ -334,6 +337,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			elmStarted = oldStarted;
 			return true;
 		default:
+			elmStarted = oldStarted;
 			return super.onOptionsItemSelected(item);
 		}
 		
@@ -342,8 +346,8 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	private void updateUI() {
 		try {
 			ClearSensorText();
-			mRedrawHandler.sleep(refreshMs);
 			for (int i = 0; i < 4; i++) {
+				mRedrawHandler.sleep(refreshMs / 4);
 				Button button = null;
 				switch (i) {
 				case 0:
@@ -368,7 +372,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 									+ " "
 									+ Double.toString(currentElements[i].currentValue));
 						}
-						else{
+						else{ //sensorsPerTime == 1
 							if (currentElements[i] == gaugeElement){
 								maestro.GetPidValue(currentElements[i]);
 								button.setText(currentElements[i].getShortDescription()
@@ -379,15 +383,15 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 								button.setText(currentElements[i].getShortDescription());
 							}
 						}
-						if (currentElements[i] == gaugeElement){
+						if (currentElements[i] == gaugeElement){//draw gauge val
 							gauge.setValue((float) (currentElements[i].currentValue * gaugeValueFactor));
 						}
 						button.setText(currentElements[i].getShortDescription()
 								+ " "
 								+ Double.toString(currentElements[i].currentValue));
-					}
+					}//if elmstated
 				} 
-				else {
+				else {//currentElements[i] == null
 					button.setText("");
 				}
 			}
@@ -438,7 +442,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensorsPerTime = Integer.parseInt(prefs.getString("list_preference_read_sensors",
 				"4")); 
 		InitSensorUI();
-		//InitMaestro(); 
+
 	}
 
 	public void SetDevice(String item) {
