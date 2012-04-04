@@ -270,7 +270,7 @@ public class ElmCore {
 		}
 	}
 
-	public int GetNumOfDTC(boolean noError, boolean milIsOn) {
+	public int GetNumOfDTC(boolean[] noError, boolean milIsOn) {
 		StringBuilder buf = new StringBuilder("");
 		Globals.PROC_RES resState;
 		cmd = "0101";
@@ -284,19 +284,19 @@ public class ElmCore {
 				if (buf.length() > 2) {
 					String tmp = buf.substring(0, 2);
 					int itmp = HexToInt(tmp);
-					noError = true;
+					noError[0] = true;
 					milIsOn = (itmp & 0x80) == 0x80;
 					return (itmp & 0x7F);
 				}
-				noError = true;
+				noError[0] = true;
 				milIsOn = false;
 				return 0;
 			} else {
-				noError = false;
+				noError[0] = false;
 				return 0;
 			}
 		} else {
-			noError = false;
+			noError[0] = false;
 			return 0;
 		}
 	}
@@ -339,8 +339,8 @@ public class ElmCore {
 		return "";
 	}
 
-	public void ResetDtc(boolean noError) {
-		noError = false;
+	public void ResetDtc(boolean[] noError) {
+		noError[0] = false;
 		StringBuilder buf = new StringBuilder("");
 		Globals.PROC_RES resState;
 		cmd = "04";
@@ -351,7 +351,7 @@ public class ElmCore {
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "44";
 			if (IsValidResponse(buf, vehicle_response.toString(), cmd)) {
-				noError = true;
+				noError[0] = true;
 				return;
 			}
 		}

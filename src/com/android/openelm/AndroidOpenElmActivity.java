@@ -478,7 +478,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	public void ClearSensorText() {
-
 		sensor1.setText("");
 		sensor2.setText("");
 		sensor3.setText("");
@@ -567,7 +566,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		}
 		button.setClickable(false);
 		button.setBackgroundColor(Color.GREEN);
-		button.setTextColor(Color.WHITE);
+		button.setTextColor(Color.RED);
 		CreateGauge(idx);
 		gaugeElement = currentElements[idx];
 	}
