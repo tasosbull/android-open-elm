@@ -326,7 +326,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			return true;
 		case R.id.elm_stop:
 			ElmStop();
-			elmStarted = oldStarted;
 			return true;
 		case R.id.elm_selectdevice:
 			SelectDevice();

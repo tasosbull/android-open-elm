@@ -184,7 +184,7 @@ public class ElmMaestro {
 		_currentElements = new ElmBankElement[4];
 		int startElement = 1;
 		if (bank > 1)
-			startElement = (bank * _bankLayout) + 1;
+			startElement = ((bank - 1) * _bankLayout) + 1;
 		if (startElement <= _elements.size()) {
 			for (int i = 0; i < 4; ++i) {
 				if ((startElement + i) > _elements.size())
