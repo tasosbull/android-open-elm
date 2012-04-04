@@ -346,7 +346,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		try {
 			ClearSensorText();
 			for (int i = 0; i < 4; i++) {
-				mRedrawHandler.sleep(refreshMs / 4);
+				
 				Button button = null;
 				switch (i) {
 				case 0:
@@ -366,6 +366,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 					button.setText(currentElements[i].getShortDescription());
 					if (elmStarted) {
 						if(sensorsPerTime == 4){
+							mRedrawHandler.sleep(refreshMs / 4);
 							maestro.GetPidValue(currentElements[i]);
 							button.setText(currentElements[i].getShortDescription()
 									+ " "
@@ -373,6 +374,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 						}
 						else{ //sensorsPerTime == 1
 							if (currentElements[i] == gaugeElement){
+								mRedrawHandler.sleep(refreshMs / 4);
 								maestro.GetPidValue(currentElements[i]);
 								button.setText(currentElements[i].getShortDescription()
 										+ " "
@@ -389,12 +391,17 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 								+ " "
 								+ Double.toString(currentElements[i].currentValue));
 					}//if elmstated
+					else{
+						
+						mRedrawHandler.sleep(refreshMs / 4);	
+					}
 				} 
 				else {//currentElements[i] == null
 					button.setText("");
 				}
 			}
 		} catch (Exception ex) {
+			mRedrawHandler.sleep(refreshMs / 4);
 			AddError(ex.getMessage());
 		}
 	}
