@@ -2,3 +2,5 @@ TODO
   add sensors
   create view for console style commands
   dtc
+  
+  dsdssd
