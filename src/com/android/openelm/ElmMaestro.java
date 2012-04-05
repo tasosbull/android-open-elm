@@ -146,7 +146,7 @@ public class ElmMaestro {
 				ElmBankElement fElem = GetElementById(pidFound);
 				if (fElem != null){
 					GetPidOriginalValue(fElem);
-					formula.replace(original, Double.toString(fElem.currentValue));
+					formula = formula.replace(original, Double.toString(fElem.currentValue));
 				}
 				//find by id the element 
 			}
