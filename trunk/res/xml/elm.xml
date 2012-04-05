@@ -16,8 +16,8 @@
   		<error>6000</error>
   		<formula>(({1}*256)+{2})/4</formula>
   		<gauge_analog>1</gauge_analog>
-  		<gauge_notches_total>24</gauge_notches_total>
-  		<gauge_notches_increment_large>2</gauge_notches_increment_large>
+  		<gauge_notches_total>16</gauge_notches_total>
+  		<gauge_notches_increment_large>1</gauge_notches_increment_large>
   		<gauge_notches_increment_small>1</gauge_notches_increment_small>
   		<gauge_notches_display_factor>1</gauge_notches_display_factor>
   		<gauge_scale_min_center_max>0;6;10</gauge_scale_min_center_max>
