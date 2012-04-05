@@ -99,6 +99,20 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	int refreshMs = 500; 
 	int sensorsPerTime = 4;
 	
+
+	/*
+	 * setContentView(R.layout.main); elm = (TextView)
+	 * findViewById(R.id.elm); edittext = (EditText)
+	 * findViewById(R.id.edittext); button = (Button)
+	 * findViewById(R.id.button); button_write = (Button)
+	 * findViewById(R.id.button_write); button_read = (Button)
+	 * findViewById(R.id.button_read); button.setOnClickListener(this);
+	 * button_read.setOnClickListener(this);
+	 * button_write.setOnClickListener(this); InitMaestro();
+	 */
+	
+	
+	
 	private RefreshHandler mRedrawHandler = new RefreshHandler();
 
 	class RefreshHandler extends Handler {
@@ -120,19 +134,28 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		InitSensorUI();
 		InitMaestro();
 		maestroInitialized = true;
-		updateUI();
-		/*
-		 * setContentView(R.layout.main); elm = (TextView)
-		 * findViewById(R.id.elm); edittext = (EditText)
-		 * findViewById(R.id.edittext); button = (Button)
-		 * findViewById(R.id.button); button_write = (Button)
-		 * findViewById(R.id.button_write); button_read = (Button)
-		 * findViewById(R.id.button_read); button.setOnClickListener(this);
-		 * button_read.setOnClickListener(this);
-		 * button_write.setOnClickListener(this); InitMaestro();
-		 */
+		
 	}
 
+
+	@Override
+	public void onStart() {
+		super.onStart();
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		getPrefs();
+		updateUI();
+	}
+
+	@Override
+	public void onPause(){
+		elmStarted = false;
+		super.onPause();
+	}
+	
 	private void InitSensorUI() {
 
 		setContentView(R.layout.main);
@@ -250,13 +273,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			maestro.core.SendCommand(edittext.getText().toString());
 		}
 	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		getPrefs();
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
