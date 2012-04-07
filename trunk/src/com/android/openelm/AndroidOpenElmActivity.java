@@ -313,6 +313,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 
 	private void ElmStart() {
+		if(!maestro.IsConnected()){
+			Alert("Disconnected", "Try Connect from menu first");
+			return;
+		}
 		elmStarted = true;
 	}
 
@@ -348,8 +352,12 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			elmStarted = oldStarted;
 			return true;
 		case R.id.elm_connect:
+			elmStarted = false;
 			maestro.Connect(deviceSelected);
-			elmStarted = oldStarted;
+			return true;
+		case R.id.elm_disconnect:
+			elmStarted = false;
+			maestro.Disconnect();
 			return true;
 		default:
 			elmStarted = oldStarted;
@@ -594,6 +602,16 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			SetSelectedElement(0);
 		}
 	}
-
+	
+	public void Alert(String title, String message){
+		new AlertDialog.Builder(this)
+		.setTitle(title)
+		.setMessage(message)
+		.setNeutralButton("Ok",
+		new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog,
+		int which) {}
+		}).show();
+	}
 
 }
