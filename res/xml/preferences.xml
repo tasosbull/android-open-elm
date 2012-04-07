@@ -38,6 +38,7 @@
                 android:title="@string/elm_refresh_interval"
                 android:defaultValue="500"
                 android:summary="@string/elm_refresh_interval_setup"
+                android:inputType="phone"
 	            android:dialogMessage="Select refresh interval"   
                 android:dialogTitle="@string/elm_refresh_interval" />
                 
@@ -45,6 +46,7 @@
                 android:key="preference_screen_offset"
                 android:title="@string/elm_screen_offset"
                 android:defaultValue="100"
+                android:inputType="phone"
                 android:summary="@string/elm_screen_offset_setup"
 	            android:dialogMessage="Select Screen offset"   
                 android:dialogTitle="@string/elm_screen_offset" />

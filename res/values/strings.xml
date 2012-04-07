@@ -26,6 +26,7 @@
     <string name="elm_com_port_setup">Com port setup</string>
     <string name="elm_selectdevice">Select Device</string>
     <string name="elm_connect">Connect</string>
+    <string name="elm_disconnect">Disconnect</string>
     <string name="elm_refresh_interval">Refresh (milisecs)</string>
     <string name="elm_refresh_interval_setup">Refresh interval setup</string>
     <string name="elm_screen_offset">Screen offset</string>

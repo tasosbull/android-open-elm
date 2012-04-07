@@ -45,6 +45,7 @@ public interface ICommPort {
     public boolean FoundBluetooth();
     public void SetError(String error);
     public List<String> GetNameDevices();
+    public boolean IsConnected();
     
 
 }

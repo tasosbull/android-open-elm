@@ -45,7 +45,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
-
 public class ConcreteCommPort implements ICommPort {
 	Set<BluetoothDevice> pairedDevices = null;
 
@@ -85,14 +84,17 @@ public class ConcreteCommPort implements ICommPort {
 
 	public boolean FoundBluetooth() {
 		return (bluetoothAdapter != null);
+	}
 
+	public boolean IsConnected() {
+		return (socket != null);
 	}
 
 	public void SetAutoDetect(boolean autoDetect) {
 	}
 
 	public boolean GetAutoDetect() {
-		// TODO For the future
+		// TODO future
 		return false;
 	}
 
@@ -102,7 +104,6 @@ public class ConcreteCommPort implements ICommPort {
 
 	public boolean Connect(String deviceName) {
 		if (socket != null) {
-		
 			return true;
 		}
 		bluetoothAdapter.cancelDiscovery();
@@ -144,19 +145,22 @@ public class ConcreteCommPort implements ICommPort {
 
 	public void Disconnect() {
 		try {
+			if (socket == null)
+				return;
+			socket.getInputStream().close();
+			socket.getOutputStream().close();
 			socket.close();
-		} catch (IOException e) {
+			socket = null;
 
+		} catch (IOException e) {
+			SetError("IOException " + e.getMessage());
+		} catch (Exception e) {
 			SetError("IOException " + e.getMessage());
 		}
 	}
 
 	public int HasData() throws IOException {
-		InputStream mmInStream;
-
-		mmInStream = socket.getInputStream();
-		return mmInStream.available();
-
+		return socket.getInputStream().available();
 	}
 
 	public void Flush() {
@@ -182,16 +186,11 @@ public class ConcreteCommPort implements ICommPort {
 			mmInStream = socket.getInputStream();
 			byte[] buffer;
 			total = 0;
-			// int i;
-			// while ((i = HasData()) > 0) {
-
 			buffer = new byte[1];
 			bytes = mmInStream.read(buffer);
 			String s = new String(buffer);
 			data.append(s);
 			total += bytes;
-			// }
-
 		} catch (IOException e) {
 			SetError(e.getMessage());
 		}

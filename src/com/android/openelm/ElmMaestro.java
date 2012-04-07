@@ -91,6 +91,10 @@ public class ElmMaestro {
 		comPort.Disconnect();
 	}
 
+	public boolean IsConnected() {
+		return comPort.IsConnected();
+	}
+
 	public String GetCommandResult(String command) {
 		return core.GetCommandResult(command);
 
@@ -110,7 +114,6 @@ public class ElmMaestro {
 		return eval.Evaluate(formula);
 	}
 
-	
 	public void GetPidOriginalValue(ElmBankElement elem) {
 		String result = "";
 		result = core.GetPidResponse(elem.getPid(), elem.getNumbytes());
@@ -121,17 +124,17 @@ public class ElmMaestro {
 		} else {
 			gui.AddError(result);
 		}
-		
+
 	}
-	
-	private ElmBankElement GetElementById(int id){
-		for(int i = 0; i < _elements.size(); i++){
-			if(_elements.get(i).getId() == id)
+
+	private ElmBankElement GetElementById(int id) {
+		for (int i = 0; i < _elements.size(); i++) {
+			if (_elements.get(i).getId() == id)
 				return _elements.get(i);
 		}
 		return null;
 	}
-	
+
 	public void GetPidValue(ElmBankElement elem) {
 		if (!elem.getMode().equals("CALC")) {
 			GetPidOriginalValue(elem);
@@ -144,11 +147,12 @@ public class ElmMaestro {
 				String found = original.replace("{", "").replace("}", "");
 				int pidFound = Integer.parseInt(found);
 				ElmBankElement fElem = GetElementById(pidFound);
-				if (fElem != null){
+				if (fElem != null) {
 					GetPidOriginalValue(fElem);
-					formula = formula.replace(original, Double.toString(fElem.currentValue));
+					formula = formula.replace(original,
+							Double.toString(fElem.currentValue));
 				}
-				//find by id the element 
+				// find by id the element
 			}
 			double val = eval.Evaluate(formula);
 			elem.currentValue = val;
@@ -272,8 +276,8 @@ public class ElmMaestro {
 	public void set_timerRefresh(long _timerRefresh) {
 		this._timerRefresh = _timerRefresh;
 	}
-	
-	class CalcPair{
+
+	class CalcPair {
 		public String pid;
 		public int bytes;
 		public String original;
