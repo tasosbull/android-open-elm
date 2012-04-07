@@ -13,5 +13,9 @@
         android:title="@string/elm_stop" />
     <item android:id="@+id/elm_disconnect"
         android:title="@string/elm_disconnect" />
+    <item android:id="@+id/elm_trouble_codes_detect"
+        android:title="@string/elm_trouble_codes_detect" />
+    <item android:id="@+id/elm_trouble_codes_reset"
+        android:title="@string/elm_trouble_codes_reset" />
 
 </menu>

@@ -30,6 +30,8 @@ public final class R {
         public static final int elm_selectdevice=0x7f080002;
         public static final int elm_start=0x7f080004;
         public static final int elm_stop=0x7f080005;
+        public static final int elm_trouble_codes_detect=0x7f080007;
+        public static final int elm_trouble_codes_reset=0x7f080008;
         public static final int relative=0x7f080000;
     }
     public static final class layout {
@@ -70,6 +72,8 @@ public final class R {
         public static final int elm_selectdevice=0x7f060017;
         public static final int elm_start=0x7f060003;
         public static final int elm_stop=0x7f060004;
+        public static final int elm_trouble_codes_detect=0x7f060020;
+        public static final int elm_trouble_codes_reset=0x7f060021;
         public static final int hello=0x7f060000;
     }
     public static final class xml {
