@@ -33,6 +33,9 @@
     <string name="elm_screen_offset_setup">Screen offset setup</string>
     <string name="elm_read_sensors_pertime_setup">Sensors per time setup</string>
     <string name="elm_read_sensors_pertime">Sensors per time</string>
+    <string name="elm_trouble_codes_detect">Engine Troubles</string>
+    <string name="elm_trouble_codes_reset">Reset Check Engine</string>
+    
     
     
 

@@ -72,12 +72,6 @@ public class ElmCore {
 				|| (x >= 'A' && x <= 'F');
 	}
 
-	public int ReadQueue(StringBuilder response) {
-		Wait();
-		
-		return comm.ReadData(response);
-
-	}
 
 	public String GetCommandResult(String command) {
 		StringBuilder buf = new StringBuilder("");
@@ -104,7 +98,7 @@ public class ElmCore {
 				response.append(s);
 				prompt = s.indexOf(">") >= 0;
 			}
-			escape = (prompt /*|| timer.isErrorTimeout()*/);
+			escape = (prompt);
 		}
 		if (prompt) {
 			return Globals.READ_RES.PROMPT;
@@ -270,7 +264,7 @@ public class ElmCore {
 		}
 	}
 
-	public int GetNumOfDTC(boolean[] noError, boolean milIsOn) {
+	public int GetNumOfDTC(boolean[] noError, boolean[] milIsOn) {
 		StringBuilder buf = new StringBuilder("");
 		Globals.PROC_RES resState;
 		cmd = "0101";
@@ -285,11 +279,11 @@ public class ElmCore {
 					String tmp = buf.substring(0, 2);
 					int itmp = HexToInt(tmp);
 					noError[0] = true;
-					milIsOn = (itmp & 0x80) == 0x80;
+					milIsOn[0] = (itmp & 0x80) == 0x80;
 					return (itmp & 0x7F);
 				}
 				noError[0] = true;
-				milIsOn = false;
+				milIsOn[0] = false;
 				return 0;
 			} else {
 				noError[0] = false;
@@ -358,7 +352,7 @@ public class ElmCore {
 
 	}
 
-	public ArrayList<String> getDtcList(boolean noError) {
+	public ArrayList<String> getDtcList(boolean[] noError) {
 		ArrayList<String> list = new ArrayList<String>();
 		StringBuilder buf = new StringBuilder("");
 		Globals.PROC_RES resState;
@@ -379,11 +373,11 @@ public class ElmCore {
 					}
 				}
 			} else {
-				noError = false;
+				noError[0] = false;
 				return null;
 			}
 		} else {
-			noError = false;
+			noError[0] = false;
 			return null;
 		}
 		return list;

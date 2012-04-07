@@ -157,8 +157,9 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	}
 	
 	private void InitSensorUI() {
-
+		
 		setContentView(R.layout.main);
+		
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		setContentView(R.layout.main);
@@ -242,7 +243,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		rl.addView(text, params);
 		if(maestroInitialized)
 			this.onClick(sensor1);
-
+		
 	}
 
 	public void onClick(View v) {
@@ -358,6 +359,14 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		case R.id.elm_disconnect:
 			elmStarted = false;
 			maestro.Disconnect();
+			return true;
+		case R.id.elm_trouble_codes_detect:
+			elmStarted = false;
+			//
+			return true;
+		case R.id.elm_trouble_codes_reset:
+			elmStarted = false;
+			//
 			return true;
 		default:
 			elmStarted = oldStarted;
