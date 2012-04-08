@@ -352,6 +352,7 @@ public class ElmCore {
 
 	}
 
+	//TODO debug this funnction
 	public ArrayList<String> getDtcList(boolean[] noError) {
 		ArrayList<String> list = new ArrayList<String>();
 		StringBuilder buf = new StringBuilder("");
@@ -364,12 +365,12 @@ public class ElmCore {
 		if (resState == Globals.PROC_RES.HEX_DATA) {
 			cmd = "43";
 			if (IsValidResponse(buf, vehicle_response.toString(), cmd)) {
-				int cnt = buf.length() / 4;
+				int cnt = buf.toString().length() / 4;
 				for (int i = 0; i < cnt; i++) {
-					String tmp = buf.substring(i * 4, 4);
+					String tmp = buf.toString().substring(i * 4, (i * 4) + 4);
 					if (!tmp.equals("0000")) {
 						String prefix = DTCLookupFirstChar(tmp.charAt(0));
-						list.add(prefix + tmp.substring(1, 3));
+						list.add(prefix + tmp.substring(1, 1 + 3));
 					}
 				}
 			} else {
