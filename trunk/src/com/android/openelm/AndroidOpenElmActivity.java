@@ -29,6 +29,7 @@
 
 package com.android.openelm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.android.openelm.gui.LightGauge;
@@ -56,6 +57,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 
 public class AndroidOpenElmActivity extends Activity implements IGui,
 		OnClickListener {
@@ -100,18 +102,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	int sensorsPerTime = 4;
 	
 
-	/*
-	 * setContentView(R.layout.main); elm = (TextView)
-	 * findViewById(R.id.elm); edittext = (EditText)
-	 * findViewById(R.id.edittext); button = (Button)
-	 * findViewById(R.id.button); button_write = (Button)
-	 * findViewById(R.id.button_write); button_read = (Button)
-	 * findViewById(R.id.button_read); button.setOnClickListener(this);
-	 * button_read.setOnClickListener(this);
-	 * button_write.setOnClickListener(this); InitMaestro();
-	 */
-	
-	
 	
 	private RefreshHandler mRedrawHandler = new RefreshHandler();
 
@@ -120,7 +110,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		public void handleMessage(Message msg) {
 			AndroidOpenElmActivity.this.updateUI();
 		}
-
 		public void sleep(long delayMillis) {
 			this.removeMessages(0);
 			sendMessageDelayed(obtainMessage(0), delayMillis);
@@ -134,9 +123,7 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		InitSensorUI();
 		InitMaestro();
 		maestroInitialized = true;
-		
 	}
-
 
 	@Override
 	public void onStart() {
@@ -153,13 +140,12 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 	@Override
 	public void onPause(){
 		elmStarted = false;
+		maestro.Disconnect();
 		super.onPause();
 	}
 	
 	private void InitSensorUI() {
-		
 		setContentView(R.layout.main);
-		
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		setContentView(R.layout.main);
@@ -362,11 +348,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			return true;
 		case R.id.elm_trouble_codes_detect:
 			elmStarted = false;
-			//
+			DoChechEngine();
 			return true;
 		case R.id.elm_trouble_codes_reset:
 			elmStarted = false;
-			//
 			return true;
 		default:
 			elmStarted = oldStarted;
@@ -425,7 +410,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 								+ Double.toString(currentElements[i].currentValue));
 					}//if elmstated
 					else{
-						
 						mRedrawHandler.sleep(refreshMs / 4);	
 					}
 				} 
@@ -481,7 +465,6 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		sensorsPerTime = Integer.parseInt(prefs.getString("list_preference_read_sensors",
 				"4")); 
 		InitSensorUI();
-
 	}
 
 	public void SetDevice(String item) {
@@ -502,12 +485,10 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 				dialog.dismiss();
 				SetDevice(items[item].toString());
 				deviceSelected = items[item].toString();
-
 			}
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
-
 	}
 
 	public void ClearSensorText() {
@@ -611,6 +592,55 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 			SetSelectedElement(0);
 		}
 	}
+
+	private void DoChechEngine(){
+		if(!maestro.IsConnected()){
+			Alert("Disconnected", "Try Connect from menu first");
+			return;
+		}
+		ArrayList<String> list = new ArrayList<String>();
+		boolean[] noError = new boolean[1];
+		boolean[] milIsOn = new boolean[1];
+		int numOfDtc = maestro.GetNumOfDTC(noError, milIsOn);
+		if(!noError[0]){
+			Alert("Check Engine Troubles","Unable to get num of troubles");
+			return;
+		}
+		if(!milIsOn[0]){
+			Alert("Check Engine Troubles","No error found");
+			return;
+		}
+		if(milIsOn[0] && (numOfDtc > 0)){
+			Alert("Check Engine Troubles",Integer.toString(numOfDtc) + " errors found");
+			return;
+			
+		}
+		//TODO get list and show errors
+	}
+	
+	public void DoResetDtc(){
+		if(!maestro.IsConnected()){
+			Alert("Disconnected", "Try Connect from menu first");
+			return;
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Are you sure you want reset Dtc?")
+		       .setCancelable(false)
+		       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		        	   boolean noError[] = new boolean[0];
+		                maestro.ResetDtc(noError);
+		                dialog.dismiss();
+		           }
+		       })
+		       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+	}
+
 	
 	public void Alert(String title, String message){
 		new AlertDialog.Builder(this)
@@ -621,6 +651,20 @@ public class AndroidOpenElmActivity extends Activity implements IGui,
 		public void onClick(DialogInterface dialog,
 		int which) {}
 		}).show();
+	}
+	
+	
+	public void ShowList(String title, ArrayList<String> list){
+		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+		new AlertDialog.Builder(this)
+		.setTitle(title)
+		.setItems(items, null)
+		.setNeutralButton("Ok",
+		new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog,
+		int which) {}
+		}).show();
+
 	}
 
 }

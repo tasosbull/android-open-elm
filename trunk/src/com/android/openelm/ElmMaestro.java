@@ -277,11 +277,16 @@ public class ElmMaestro {
 		this._timerRefresh = _timerRefresh;
 	}
 
-	class CalcPair {
-		public String pid;
-		public int bytes;
-		public String original;
-		public double value;
+	public int GetNumOfDTC(boolean[] noError, boolean[] milIsOn){
+		return core.GetNumOfDTC(noError, milIsOn);
 	}
-
+	
+	public ArrayList<String> getDtcList(boolean[] noError){
+		return core.getDtcList(noError);
+	}
+	
+	public boolean ResetDtc(boolean[] noError) {
+		core.ResetDtc(noError);
+		return noError[0];
+	}
 }
